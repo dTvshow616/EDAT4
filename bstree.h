@@ -178,4 +178,15 @@ Status tree_insert(BSTree *tree, const void *elem);
  */
 Status tree_remove(BSTree *tree, const void *elem);
 
+/*tree_find_min: devuelve el elemento más pequeño almacenado en el árbol.
+ tree_find_max: devuelve el elemento más grande almacenado en el árbol.
+ tree_contains: comprueba si un elemento existe en el árbol.
+ tree_insert: inserta un nuevo elemento en el árbol (si el elemento ya se encuentra
+en el árbol no se debe insertar, pero la función devolverá OK).*/
+
+void *tree_find_min(); /*TODO - */
+void *tree_find_max(); /*TODO - */
+Bool tree_contains();  /*TODO - */
+Status tree_insert();  /*TODO - */
+
 #endif
