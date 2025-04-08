@@ -1,0 +1,45 @@
+./p4_e1 ./data/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" normal
+No. lines: 50000
+Mode: normal
+Tree building time: 22603 ticks (0.022603 seconds)
+Tree size: 50000
+Tree depth: 41
+Min element in tree: [6, Lapa,_La, 0, 0] - 1 ticks (0.000001 seconds)
+Max element in tree: [273907, Pacios, 0, 0] - 0 ticks (0.000000 seconds)
+Element found - 1 ticks (0.000001 seconds)
+Removing element in tree: OK - 1 ticks (0.000001 seconds)
+Tree size: 49999
+Tree depth: 41
+
+./p4_e1 ./data/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" sorted
+No. lines: 50000
+Mode: sorted
+Tree building time: 9916 ticks (0.009916 seconds)
+Tree size: 50000
+Tree depth: 16
+Min element in tree: [6, Lapa,_La, 0, 0] - 1 ticks (0.000001 seconds)
+Max element in tree: [273907, Pacios, 0, 0] - 1 ticks (0.000001 seconds)
+Element found - 1 ticks (0.000001 seconds)
+Removing element in tree: OK - 0 ticks (0.000000 seconds)
+Tree size: 49999
+Tree depth: 16
+
+./p4_e1 ./data/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" normal
+No. lines: 50000
+Mode: normal
+Tree building time: 21214 ticks (0.021214 seconds)
+Tree size: 50000
+Tree depth: 41
+Min element in tree: [6, Lapa,_La, 0, 0] - 1 ticks (0.000001 seconds)
+Max element in tree: [273907, Pacios, 0, 0] - 1 ticks (0.000001 seconds)
+Element NOT found - 0 ticks (0.000000 seconds)
+
+./p4_e1 ./data/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" sorted
+No. lines: 50000
+Mode: sorted
+Tree building time: 9951 ticks (0.009951 seconds)
+Tree size: 50000
+Tree depth: 16
+Min element in tree: [6, Lapa,_La, 0, 0] - 0 ticks (0.000000 seconds)
+Max element in tree: [273907, Pacios, 0, 0] - 1 ticks (0.000001 seconds)
+Element NOT found - 1 ticks (0.000001 seconds)

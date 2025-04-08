@@ -1,0 +1,10 @@
+this is
+an unsorted
+string that
+can be used
+for testing
+purposes by
+inserting each line
+into a queue
+and then extracting
+all the elements

@@ -1,0 +1,24 @@
+# This file can be included in the main Makefile with the command:
+# include makefile_ext
+
+DATA = ./data
+OUT = ./out
+
+run_e1: p4_e1
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" normal
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" sorted
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" normal
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" sorted
+
+run_e2: p4_e2
+	./p4_e2 $(DATA)/data_string_10.txt $(OUT)/data_string_10.out
+	./p4_e2 $(DATA)/data_string_1K.txt $(OUT)/data_string_1K.out
+	./p4_e2 $(DATA)/data_string_2K.txt $(OUT)/data_string_2K.out
+
+run_e3: p4_e3
+	./p4_e3 grades.txt
+
+# Remaining rules must be in main Makefile.
