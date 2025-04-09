@@ -1,3 +1,4 @@
+#include "bstree.h"
 /*Se pide implementar la primitiva pública del TAD BST tree_remove para eliminar un elemento del árbol, cuya declaración se encuentra en bstree.h.
 
 Para ello hay que implementar también la función privada recursiva _bst_remove_rec. Al igual que el resto de funciones privadas recursivas de BST,
@@ -26,13 +27,33 @@ _bst_remove_rec(BSTree* pn, void* elem, f(cmp_elem)) {
   }
 
   /*Comparación de elem con la información del nodo actual*/
-
   if (elem < pn.info) {
     /*Buscar en el subárbol izquierdo*/
-    pn.left = _bst_remove_rec(pn.left, elem, cmp_elem) {}
-    else if (elem > pn.info) {
-    }
-    else if (elem == pn.info) {
-    }
+    pn.left = _bst_remove_rec(pn.left, elem, cmp_elem);
+
+  } else if (elem > pn.info) {
+    /*Buscar en el subárbol derecho*/
+    pn.right = _bst_remove_rec(pn.right, elem, cmp_elem);
+  } else if (elem == pn.info) {
+    /*Se ha encontrado el elemento que se va a eliminar*/
   }
+  if (/*Tree has no sons*/) {
+    _bst_node_free(pn);
+    return NULL;
+  } else if (/*Tree only has right sons*/) {
+    ret_node = pn.right;
+    _bst_node_free(pn);
+    return ret_node;
+  } else if (/*Tree only has left sons*/) {
+    ret_node = pn.left;
+    _bst_node_free(pn);
+    return ret_node;
+  } else if (/*Tree has left and right sons*/) {
+    /*Se libera pn y se reemplaza por el mínimo el subárbol derecho, que se elimina de su posición actual*/
+    aux_node = _bst_find_min_rec(pn.right);
+    pn.info = auz_node.info;
+    pn.right = _bst_remove_rec(pn.right, aux_node.info, cmp_elem);
+    return pn;
+  }
+  return pn;
 }
