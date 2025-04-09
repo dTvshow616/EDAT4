@@ -152,7 +152,17 @@ size_t tree_size(const BSTree *tree);
  * return, this function returns the number of characters printed, and a
  * negative value if an error occurs.
  */
-int tree_preOrder(FILE *f, const BSTree *tree);
+int tree_preOrder(FILE *f, const BSTree *tree) {
+  /* Base case: empty tree.*/
+  if (bt_is_empty(tree) == TRUE) {
+    return;
+  }
+
+  /*Visit of the node and recursive calls*/
+  visit(tree);
+  pt_preorder(left(tree));
+  bt_preorder(right(tree));
+}
 
 /**
  * @brief Same as tree_preOrder but with inOrder algorithm.
@@ -162,7 +172,17 @@ int tree_preOrder(FILE *f, const BSTree *tree);
  *
  * @return See tree_preOrder.
  */
-int tree_inOrder(FILE *f, const BSTree *tree);
+int tree_inOrder(FILE *f, const BSTree *tree) {
+  /*Base case: empty tree*/
+  if (bt_is_empty(tree) == TRUE) {
+    return;
+  }
+
+  /*Visit of the node and recursive calls*/
+  pt_preorder(left(tree));
+  visit(tree);
+  bt_preorder(right(tree));
+}
 
 /**
  * @brief Same as tree_preOrder but with postOrder algorithm.
@@ -172,7 +192,17 @@ int tree_inOrder(FILE *f, const BSTree *tree);
  *
  * @return See tree_preOrder.
  */
-int tree_postOrder(FILE *f, const BSTree *tree);
+int tree_postOrder(FILE *f, const BSTree *tree) {
+  /*Base case: empty tree*/
+  if (bt_is_empty(tree) == TRUE) {
+    return;
+  }
+
+  /*Visit of the node and recursive calls*/
+  pt_preorder(left(tree));
+  bt_preorder(right(tree));
+  visit(tree);
+}
 
 /**
  * @brief Public function that finds the minimum element in a Binary Search
@@ -210,7 +240,31 @@ void *tree_find_max(BSTree *tree);
  *
  * @return Bool value TRUE if the element was found, FALSE otherwise.
  */
-Bool tree_contains(BSTree *tree, const void *elem);
+Bool tree_contains(BSTree *tree, const void *elem) {
+  BSTNode *found = NULL;
+  if ((tree == NULL) || (elem == NULL)) {
+    return NULL;
+  }
+  found = _bst_search_rec(root(tree), elem, cmp(tree));
+
+  return (found ? TRUE : FALSE);
+}
+
+/*Privada*/
+BSTNode *_bst_search_rec(BSTNode *pn, void *e, int (*ele_cmp)(const void *, const void *)) {
+  int cmp = 0;
+  if (pn == NULL) {
+    return NULL;
+  }
+  cmp = ele_cmp(e, info(pn));
+  if (cmp == 0) {
+    return pn;
+  }
+  if (cmp < 0) {
+    return _bst_search_rec(left(pn), e, ele_cmp);
+  }
+  return _bst_search_rec(right(pn), e, ele_cmp);
+}
 
 /**
  * @brief Public function that inserts an element into a Binary Search Tree.
