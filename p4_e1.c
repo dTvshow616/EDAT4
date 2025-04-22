@@ -111,22 +111,22 @@ BSTree *loadUnbalancedTree(Vertex **data, int n) {
   return t;
 }
 
-int getNumberLines(FILE *pf){
-    char line[MAX_LINE];
-    int n = 0;
+int getNumberLines(FILE *pf) {
+  char line[MAX_LINE];
+  int n = 0;
 
-    while (fgets(line, MAX_LINE, pf) != NULL) {
-      n++;
-    }
+  while (fgets(line, MAX_LINE, pf) != NULL) {
+    n++;
+  }
 
-    return n;
+  return n;
 }
 
-int qsort_fun(const void *e1, const void *e2){
+int qsort_fun(const void *e1, const void *e2) {
   Vertex **pv1, **pv2;
 
-  pv1 = (Vertex **) e1;
-  pv2 = (Vertex **) e2;
+  pv1 = (Vertex **)e1;
+  pv2 = (Vertex **)e2;
 
   return vertex_cmp(*pv1, *pv2);
 }
@@ -164,7 +164,8 @@ int main(int argc, char const *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  n = getNumberLines(f_in); fclose(f_in);
+  n = getNumberLines(f_in);
+  fclose(f_in);
   fprintf(f_out, "No. lines: %d\n", n);
   f_in = fopen(argv[1], "r");
   if (!(data = loadData(f_in, n))) {
@@ -178,8 +179,7 @@ int main(int argc, char const *argv[]) {
     time = clock();
     t = loadUnbalancedTree(data, n);
     time = clock() - time;
-  }
-  else {
+  } else {
     qsort(data, n, sizeof(Vertex *), qsort_fun);
     fprintf(f_out, "Mode: sorted\n");
     time = clock();
@@ -191,37 +191,37 @@ int main(int argc, char const *argv[]) {
     exit(EXIT_FAILURE);
   }
 
-  fprintf(f_out, "Tree building time: %ld ticks (%f seconds)\n", (long)time, ((float) time) / CLOCKS_PER_SEC);
+  fprintf(f_out, "Tree building time: %ld ticks (%f seconds)\n", (long)time, ((float)time) / CLOCKS_PER_SEC);
   fprintf(f_out, "Tree size: %ld\nTree depth: %d\n", tree_size(t), tree_depth(t));
 
   fprintf(f_out, "Min element in tree: ");
   time = clock();
   vertex_print(f_out, tree_find_min(t));
   time = clock() - time;
-  fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float) time) / CLOCKS_PER_SEC);
+  fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float)time) / CLOCKS_PER_SEC);
 
   fprintf(f_out, "Max element in tree: ");
   time = clock();
   vertex_print(f_out, tree_find_max(t));
   time = clock() - time;
-  fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float) time) / CLOCKS_PER_SEC);
+  fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float)time) / CLOCKS_PER_SEC);
 
   time = clock();
   if (tree_contains(t, v) == TRUE) {
     fprintf(f_out, "Element found");
     time = clock() - time;
-    fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float) time) / CLOCKS_PER_SEC);
+    fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float)time) / CLOCKS_PER_SEC);
 
     fprintf(f_out, "Removing element in tree: ");
     time = clock();
     fprintf(f_out, "%s", tree_remove(t, v) == OK ? "OK" : "ERR");
     time = clock() - time;
-    fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float) time) / CLOCKS_PER_SEC);
+    fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float)time) / CLOCKS_PER_SEC);
     fprintf(f_out, "Tree size: %ld\nTree depth: %d\n", tree_size(t), tree_depth(t));
   } else {
     fprintf(f_out, "Element NOT found");
     time = clock() - time;
-    fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float) time) / CLOCKS_PER_SEC);
+    fprintf(f_out, " - %ld ticks (%f seconds)\n", (long)time, ((float)time) / CLOCKS_PER_SEC);
   }
 
   freeData(data, n);

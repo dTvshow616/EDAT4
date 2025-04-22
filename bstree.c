@@ -29,7 +29,9 @@ BSTNode *node_new() {
   if (pn == NULL) {
     return NULL;
   }
+
   info(pn) = left(pn) = right(pn) = NULL;
+
   return pn;
 }
 
@@ -37,6 +39,7 @@ void node_free(BSTNode *node) {
   if (!node) {
     return NULL;
   }
+
   free(node);
 }
 
@@ -58,12 +61,15 @@ BSTree *tree_init(P_ele_print print_ele, P_ele_cmp cmp_ele) {
   if (cmp_ele == NULL) {
     return NULL;
   }
+
   pt = (BSTree *)malloc(sizeof(BSTree));
   if (pt == NULL) {
     return NULL;
   }
+
   root(pt) = NULL;
   cmp(pt) = cmp_ele;
+
   return pt;
 }
 
@@ -78,6 +84,7 @@ void tree_destroy(BSTree *tree) {
   if (tree == NULL) {
     return;
   }
+
   _bt_free_rec(root(tree));
   free(tree);
 }
@@ -107,9 +114,11 @@ Bool tree_isEmpty(const BSTree *tree) {
   if (tree == NULL) {
     return TRUE;
   }
+
   if (root(tree) == NULL) {
     return TRUE;
   }
+
   return FALSE;
 }
 
@@ -120,7 +129,17 @@ Bool tree_isEmpty(const BSTree *tree) {
  *
  * @return -1 if the tree is empty, its depth otherwise, -1 for a NULL Tree.
  */
-int tree_depth(const BSTree *tree);
+int tree_depth(const BSTree *tree) {
+  if (!tree) {
+    return -1;
+  }
+
+  if (tree_isEmpty(tree) == TRUE) {
+    return -1;
+  }
+
+  /*TODO - */
+}
 
 /**
  * @brief Public function that returns the Tree's size (its number of elements).
@@ -129,7 +148,12 @@ int tree_depth(const BSTree *tree);
  *
  * @return 0 if the tree is empty, its size otherwise, -1 for a NULL Tree.
  */
-size_t tree_size(const BSTree *tree);
+size_t tree_size(const BSTree *tree) {
+  if (!tree) {
+    return -1;
+  }
+  /*TODO - */
+}
 
 /**
  * @brief Public functions that prints the content of a Tree
@@ -153,6 +177,7 @@ size_t tree_size(const BSTree *tree);
  * negative value if an error occurs.
  */
 int tree_preOrder(FILE *f, const BSTree *tree) {
+  /*TODO - */
   /* Base case: empty tree.*/
   if (bt_is_empty(tree) == TRUE) {
     return;
@@ -160,8 +185,8 @@ int tree_preOrder(FILE *f, const BSTree *tree) {
 
   /*Visit of the node and recursive calls*/
   visit(tree);
-  pt_preorder(left(tree));
-  bt_preorder(right(tree));
+  pt_preorder(left(tree->root));
+  bt_preorder(right(tree->root));
 }
 
 /**
@@ -173,15 +198,16 @@ int tree_preOrder(FILE *f, const BSTree *tree) {
  * @return See tree_preOrder.
  */
 int tree_inOrder(FILE *f, const BSTree *tree) {
+  /*TODO - */
   /*Base case: empty tree*/
   if (bt_is_empty(tree) == TRUE) {
     return;
   }
 
   /*Visit of the node and recursive calls*/
-  pt_preorder(left(tree));
+  pt_preorder(left(tree->root));
   visit(tree);
-  bt_preorder(right(tree));
+  bt_preorder(right(tree->root));
 }
 
 /**
@@ -193,14 +219,15 @@ int tree_inOrder(FILE *f, const BSTree *tree) {
  * @return See tree_preOrder.
  */
 int tree_postOrder(FILE *f, const BSTree *tree) {
+  /*TODO - */
   /*Base case: empty tree*/
   if (bt_is_empty(tree) == TRUE) {
     return;
   }
 
   /*Visit of the node and recursive calls*/
-  pt_preorder(left(tree));
-  bt_preorder(right(tree));
+  pt_preorder(left(tree->root));
+  bt_preorder(right(tree->root));
   visit(tree);
 }
 
@@ -216,7 +243,13 @@ int tree_postOrder(FILE *f, const BSTree *tree) {
  *
  * @return Pointer to the minimum element if found, NULL otherwise.
  */
-void *tree_find_min(BSTree *tree);
+void *tree_find_min(BSTree *tree) {
+  /*TODO - */
+  int i = 0;
+
+  for (i = 0; i < tree_depth(tree); i++) {
+  }
+}
 
 /**
  * @brief Public function that finds the maximum element in a Binary Search
@@ -230,7 +263,7 @@ void *tree_find_min(BSTree *tree);
  *
  * @return Pointer to the maximum element if found, NULL otherwise.
  */
-void *tree_find_max(BSTree *tree);
+void *tree_find_max(BSTree *tree) { /*TODO - */ }
 
 /**
  * @brief Public function that tells if an element is in a Binary Search Tree.
@@ -256,13 +289,16 @@ BSTNode *_bst_search_rec(BSTNode *pn, void *e, int (*ele_cmp)(const void *, cons
   if (pn == NULL) {
     return NULL;
   }
+
   cmp = ele_cmp(e, info(pn));
   if (cmp == 0) {
     return pn;
   }
+
   if (cmp < 0) {
     return _bst_search_rec(left(pn), e, ele_cmp);
   }
+
   return _bst_search_rec(right(pn), e, ele_cmp);
 }
 
@@ -287,11 +323,14 @@ Status tree_insert(BSTree *tree, const void *elem) {
   if ((tree == NULL) || (elem == NULL)) {
     return ERROR;
   }
+
   root = _bst_insert_rec(root(tree), elem, cmp(tree));
   if (root == NULL) {
     return ERROR;
   }
+
   root(tree) = root;
+
   return OK;
 }
 
@@ -303,15 +342,20 @@ BSTNode *_bst_insert_rec(BSTNode *pn, const void *e, int (*ele_cmp)(const void *
     if (pn == NULL) {
       return NULL;
     }
+
     info(pn) = (void *)e;
+
     return pn;
   }
+
   cmp = ele_cmp(e, info(pn));
+
   if (cmp < 0) {
     left(pn) = _bst_insert_rec(left(pn), e, ele_cmp);
   } else if (cmp > 0) {
     right(pn) = _bst_insert_rec(right(pn), e, ele_cmp);
   }
+
   return pn;
 }
 
