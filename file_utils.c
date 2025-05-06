@@ -1,10 +1,10 @@
+#include "file_utils.h"
+
 #include <errno.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "file_utils.h"
 
 #define BUFFER_SIZE 512
 
@@ -26,8 +26,7 @@ int *int_init(int a) {
 }
 
 int int_cmp(const void *c1, const void *c2) {
-  if (!c1 || !c2)
-    return 0;
+  if (!c1 || !c2) return 0;
 
   return (*(int *)c1 - *(int *)c2);
 }
@@ -35,8 +34,7 @@ int int_cmp(const void *c1, const void *c2) {
 void *int_copy(const void *a) {
   int *c = NULL;
 
-  if (!a)
-    return NULL;
+  if (!a) return NULL;
 
   c = int_init(*(int *)a);
   return (void *)c;
@@ -62,16 +60,14 @@ char *char_init(char a) {
 void *char_copy(const void *a) {
   char *c = NULL;
 
-  if (!a)
-    return NULL;
+  if (!a) return NULL;
 
   c = char_init(*(char *)a);
   return (void *)c;
 }
 
 int char_cmp(const void *c1, const void *c2) {
-  if (!c1 || !c2)
-    return 0;
+  if (!c1 || !c2) return 0;
 
   return (*(char *)c1 - *(char *)c2);
 }
@@ -79,8 +75,7 @@ int char_cmp(const void *c1, const void *c2) {
 void char_free(void *a) { free((char *)a); }
 
 int char_print(FILE *pf, const void *a) {
-  if (!pf || !a)
-    return -1;
+  if (!pf || !a) return -1;
 
   return fprintf(pf, "%c", *(char *)a);
 }
@@ -101,16 +96,14 @@ float *float_init(float a) {
 void *float_copy(const void *a) {
   float *c = NULL;
 
-  if (!a)
-    return NULL;
+  if (!a) return NULL;
 
   c = float_init(*(float *)a);
   return (void *)c;
 }
 
 int float_cmp(const void *c1, const void *c2) {
-  if (!c1 || !c2)
-    return 0;
+  if (!c1 || !c2) return 0;
   if (*(float *)c1 > *(float *)c2)
     return 1;
   else if (*(float *)c2 > *(float *)c1)
@@ -122,8 +115,7 @@ int float_cmp(const void *c1, const void *c2) {
 void float_free(void *a) { free((float *)a); }
 
 int float_print(FILE *pf, const void *a) {
-  if (!pf || !a)
-    return -1;
+  if (!pf || !a) return -1;
   return fprintf(pf, "%f", *(float *)a);
 }
 
@@ -131,17 +123,15 @@ int float_print(FILE *pf, const void *a) {
 void *string_copy(const void *src) { return strdup(src); }
 
 int string_cmp(const void *c1, const void *c2) {
-  if (!c1 || !c2)
-    return 0;
+  if (!c1 || !c2) return 0;
 
-  return (strcmp(*(char **)c1, *(char **)c2));
+  return (strcmp((char *)c1, (char *)c2));
 }
 
 void string_free(void *src) { free((char *)src); }
 
 int string_print(FILE *pf, const void *src) {
-  if (!pf || !src)
-    return -1;
+  if (!pf || !src) return -1;
   return fprintf(pf, "%s", (char *)src);
 }
 
@@ -158,8 +148,7 @@ void *str2int(const char *str) {
   char *end;
   int *si = malloc(sizeof(int));
 
-  if (!si)
-    return NULL;
+  if (!si) return NULL;
 
   errno = 0;
   const long sl = strtol(str, &end, 10);
@@ -189,8 +178,7 @@ void *str2str(const char *str) { return strdup(str); }
 /* convert string to char pointer */
 void *str2chr(const char *str) {
   char *c = malloc(sizeof(char));
-  if (!c)
-    return NULL;
+  if (!c) return NULL;
   *c = str[0];
   return c;
 }
@@ -204,8 +192,7 @@ void *str2float(const char *str) {
   float *f;
 
   f = malloc(sizeof(float));
-  if (!f)
-    return NULL;
+  if (!f) return NULL;
 
   *f = strtof(str, &endptr);
 
@@ -228,12 +215,10 @@ int read_line(FILE *fp, char *buffer) {
   int len;
   if (fgets(buffer, BUFFER_SIZE, fp)) {
     len = strlen(buffer);
-    if (buffer[len - 1] == '\n')
-      buffer[--len] = '\0'; // remove '\n' from end of buffer
-    if (buffer[len - 1] == '\r')
-      buffer[--len] = '\0'; // hopefully this handles '\r\n' for files created in Windows.
+    if (buffer[len - 1] == '\n') buffer[--len] = '\0';  // remove '\n' from end of buffer
+    if (buffer[len - 1] == '\r') buffer[--len] = '\0';  // hopefully this handles '\r\n' for files created in Windows.
     // printf("Buffer %d: --%s--\n", len - 1, buffer);
-    return len; // will return 0 for empty line
+    return len;  // will return 0 for empty line
   }
   return 0;
 }
@@ -256,9 +241,7 @@ Bool _w_main_stack_isEmpty (const void *tad) {
  a = read_tad_from_file (stack, int2string, _w_stack_push, w_stack_isEmpty);
  *
  **/
-Status read_tad_from_file(void *tad, char *filename, elem_from_string convert,
-                          tad_insert f_insert, tad_isEmpty f_isEmpty) {
-
+Status read_tad_from_file(void *tad, char *filename, elem_from_string convert, tad_insert f_insert, tad_isEmpty f_isEmpty) {
   FILE *fp;
   char buffer[BUFFER_SIZE];
   void *elem = NULL;

@@ -3,6 +3,19 @@
 
 #include "types.h"
 
+/*NOTE - Hay que mover las estructuras*/
+struct _BSTree {
+  BSTNode *root;
+  P_ele_print print_ele;
+  P_ele_cmp cmp_ele;
+};
+
+typedef struct _BSTNode {
+  void *info;
+  struct BSTNode *left;
+  struct BSTNode *right;
+} BSTNode;
+
 /**
  * BSTree type definition: a binary search of arbitrary elements.
  */
