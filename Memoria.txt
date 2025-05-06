@@ -10,4 +10,10 @@ Reflexiones sobre el TAD BST
 Al ejecutar el programa p4_e1.c se puede comprobar que los tiempos de creación y búsqueda
 varían mucho según si el programa se ejecuta en modo normal o en modo ordenado.
 - ¿Por qué es así?
-- ¿Hay alguna propiedad del árbol que permita explicar este comportamiento?*/
+- ¿Hay alguna propiedad del árbol que permita explicar este comportamiento?
+
+Reflexiones sobre el TAD SQ
+- ¿Qué diferencias y similitudes hay entre el TAD SQ y el TAD Cola de la práctica
+anterior?
+- ¿Qué coste (aproximado) tiene la operación de extraer un elemento en el TAD SQ?
+¿Sería posible hacer que esta operación fuera 𝒪(1)?

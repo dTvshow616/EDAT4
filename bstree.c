@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "vertex.h"
+
 #define info(pn) ((pn)->info)
 #define left(pn) ((pn)->left)
 #define right(pn) ((pn)->right)
@@ -25,12 +27,6 @@ struct _BSTree {
   P_ele_cmp cmp_ele;
 };
 /* END [_BSTree] */
-
-/* Privadas */
-Bool bt_is_always_right(BSTree *tree);
-Bool bt_is_always_right_rec(BSTNode *node);
-Bool bt_is_always_left(BSTree *tree);
-Bool bt_is_always_left_rec(BSTNode *node);
 
 /*** BSTNode TAD private functions ***/
 BSTNode *_bst_node_new() {
@@ -221,24 +217,20 @@ int tree_postOrder(FILE *f, const BSTree *tree) {
 /**** TODO: find_min, find_max, insert, contains, remove ****/
 BSTNode *_bst_find_min_rec(BSTNode *pn) {
   /*REVIEW - p4_e1a*/
-  if (!left(pn)) {
+  if (!pn || !left(pn)) {
     return pn;
   }
 
-  pn = left(pn);
-
-  return _bst_find_min_rec(pn);
+  return _bst_find_min_rec(left(pn));
 }
 
 BSTNode *_bst_find_max_rec(BSTNode *pn) {
   /*REVIEW - p4_e1a*/
-  if (!right(pn)) {
+  if (!pn || !right(pn)) {
     return pn;
   }
 
-  pn = right(pn);
-
-  return _bst_find_min_rec(pn);
+  return _bst_find_max_rec(right(pn));
 }
 
 Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
@@ -251,13 +243,14 @@ Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   cmp = cmp_elem(info(pn), elem);
 
   if (cmp == 0) {
+    printf("-----FOUND IT!!\n");
     return TRUE;
   } else if (cmp > 0) {
     /*El elemento es mayor que el buscado*/
-    _bst_contains_rec(right(pn), elem, cmp_elem);
-  } else {
+    return _bst_contains_rec(right(pn), elem, cmp_elem);
+  } else if (cmp < 0) {
     /*El elemento es menor que el buscado*/
-    _bst_contains_rec(left(pn), elem, cmp_elem);
+    return _bst_contains_rec(left(pn), elem, cmp_elem);
   }
 
   return FALSE;
@@ -266,23 +259,20 @@ Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
 BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   /*REVIEW - p4_e1a*/
   int cmp;
-  if (pn == NULL) {
-    pn = _bst_node_new();
-    if (pn == NULL) {
-      return NULL;
-    }
 
-    info(pn) = (void *)elem;
-
-    return pn;
+  if (!pn) {
+    BSTNode *new_node = _bst_node_new();
+    if (!new_node) return NULL;
+    new_node->info = (void *)elem;
+    return new_node;
   }
 
-  cmp = cmp_elem(elem, info(pn));
+  cmp = cmp_elem(elem, pn->info);
 
   if (cmp < 0) {
-    left(pn) = _bst_insert_rec(left(pn), elem, cmp_elem);
+    pn->left = _bst_insert_rec(pn->left, elem, cmp_elem);
   } else if (cmp > 0) {
-    right(pn) = _bst_insert_rec(right(pn), elem, cmp_elem);
+    pn->right = _bst_insert_rec(pn->right, elem, cmp_elem);
   }
 
   return pn;
@@ -300,92 +290,57 @@ BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   A continuación,*/
 BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   /*REVIEW - p4_e1b*/
+  int cmp;
   BSTNode *ret_node, *aux_node;
   if (!pn) {
     return NULL;
   }
+
+  cmp = cmp_elem(elem, info(pn));
   /*Comparación de elem con la información del nodo actual*/
-  if (cmp_elem(elem, info(pn)) < 0) {
+  if (cmp < 0) {
     /*Buscar en el subárbol izquierdo*/
     left(pn) = _bst_remove_rec(left(pn), elem, cmp_elem);
 
-  } else if (cmp_elem(elem, info(pn)) > 0) {
+  } else if (cmp > 0) {
     /*Buscar en el subárbol derecho*/
     right(pn) = _bst_remove_rec(right(pn), elem, cmp_elem);
 
-  } else if (cmp_elem(elem, info(pn)) == 0) {
+  } else if (cmp == 0) {
     /*Se ha encontrado el elemento que se va a eliminar*/
-  }
+    if (!right(pn) && !left(pn)) {
+      _bst_node_free(pn);
+      return NULL;
 
-  if (_bst_depth_rec(pn) == 0) {
-    _bst_node_free(pn);
-    return NULL;
+    } else if (right(pn) && !left(pn)) {
+      ret_node = right(pn);
+      _bst_node_free(pn);
+      return ret_node;
 
-  } else if (bt_is_always_right_rec(pn) == TRUE) {
-    ret_node = right(pn);
-    _bst_node_free(pn);
-    return ret_node;
+    } else if (!right(pn) && left(pn)) {
+      ret_node = left(pn);
+      _bst_node_free(pn);
+      return ret_node;
 
-  } else if (bt_is_always_left_rec(pn) == TRUE) {
-    ret_node = left(pn);
-    _bst_node_free(pn);
-    return ret_node;
-
-  } else if ((bt_is_always_right_rec(pn) == FALSE) && (bt_is_always_left_rec(pn) == FALSE)) {
-    /*Se libera pn y se reemplaza por el mínimo el subárbol derecho, que se elimina de su posición actual*/
-    aux_node = _bst_find_min_rec(right(pn));
-    info(pn) = info(aux_node);
-    right(pn) = _bst_remove_rec(right(pn), info(aux_node), cmp_elem);
-    return pn;
+    } else if (right(pn) && left(pn)) {
+      /*Se libera pn y se reemplaza por el mínimo el subárbol derecho, que se elimina de su posición actual*/
+      aux_node = _bst_find_min_rec(right(pn));
+      info(pn) = info(aux_node);
+      right(pn) = _bst_remove_rec(right(pn), info(aux_node), cmp_elem);
+      return pn;
+    }
   }
 
   return pn;
 }
 
-Bool bt_is_always_right(BSTree *tree) {
-  /*REVIEW - la he metido yo*/
-  if (!tree) {
-    return TRUE;
-  }
-
-  return bt_is_always_right_rec(root(tree));
-}
-
-Bool bt_is_always_right_rec(BSTNode *node) {
-  /*REVIEW - la he metido yo*/
-  if (!right(node) && !left(node)) {
-    return TRUE;
-  } else if (left(node)) {
-    return FALSE;
-  }
-  return bt_is_always_right_rec(right(node));
-}
-
-Bool bt_is_always_left(BSTree *tree) {
-  /*REVIEW - la he metido yo*/
-  if (!tree) {
-    return TRUE;
-  }
-
-  return bt_is_always_left_rec(root(tree));
-}
-
-Bool bt_is_always_left_rec(BSTNode *node) {
-  /*REVIEW - la he metido yo*/
-  if (!right(node) && !left(node)) {
-    return TRUE;
-  } else if (left(node)) {
-    return FALSE;
-  }
-  return bt_is_always_left_rec(right(node));
-}
-
 void *tree_find_min(BSTree *tree) {
   /*REVIEW - p4_e1a*/
   BSTNode *node;
+  if (!tree || !root(tree)) {
+    return NULL;
+  }
   /*Podemos usar recursión pero no hace falta*/
-  /*Falta CdE*/
-
   node = root(tree);
   /*Nos vamos a left pq nuestro arbol tiene el min a la izq*/
   while (left(node)) {
@@ -398,11 +353,12 @@ void *tree_find_min(BSTree *tree) {
 void *tree_find_max(BSTree *tree) {
   /*REVIEW - p4_e1a*/
   BSTNode *node;
+  if (!tree || !root(tree)) {
+    return NULL;
+  }
   /*Podemos usar recursión pero no hace falta*/
-  /*Falta CdE*/
-
   node = root(tree);
-  /*Nos vamos a left pq nuestro arbol tiene el min a la izq*/
+  /*Nos vamos a right pq nuestro arbol tiene el max a la dch*/
   while (right(node)) {
     node = right(node);
   }
@@ -412,28 +368,76 @@ void *tree_find_max(BSTree *tree) {
 
 Bool tree_contains(BSTree *tree, const void *elem) {
   /*REVIEW - p4_e1a*/
-  P_ele_cmp cmp_ele = NULL;
+  if (!tree || !elem || !cmp(tree)) {
+    return FALSE;
+  }
 
-  return _bst_contains_rec(root(tree), elem, cmp_ele);
+  return _bst_contains_rec(root(tree), elem, cmp(tree));
 }
 
 Status tree_insert(BSTree *tree, const void *elem) {
   /*REVIEW - p4_e1a*/
-  P_ele_cmp cmp_ele = NULL;
+  BSTNode *new_root;
 
-  _bst_insert_rec(root(tree), elem, cmp_ele);
+  if (!tree || !elem) {
+    return ERROR;
+  }
+
+  new_root = _bst_insert_rec(root(tree), elem, cmp(tree));
+
+  if (!new_root) {
+    return ERROR;
+  }
+
+  root(tree) = new_root;
   return OK;
 }
 
 Status tree_remove(BSTree *tree, const void *elem) {
   /*REVIEW - p4_e1b*/
-  P_ele_cmp cmp_ele = NULL;
-
   if (!tree || (tree_isEmpty(tree) == TRUE)) {
     return OK;
   }
 
-  _bst_remove_rec(root(tree), elem, cmp_ele); /*Hay que hacer algo con este return??*/
-
+  _bst_remove_rec(root(tree), elem, cmp(tree));
   return OK;
 }
+
+/*Me las he hecho pensando que hacían falta :/*/
+/*Bool bt_is_always_right(BSTree *tree) {
+
+  if (!tree) {
+    return TRUE;
+  }
+
+  return bt_is_always_right_rec(root(tree));
+}
+
+Bool bt_is_always_right_rec(BSTNode *node) {
+
+  if (!right(node) && !left(node)) {
+    return TRUE;
+  } else if (left(node)) {
+    return FALSE;
+  }
+  return bt_is_always_right_rec(right(node));
+}
+
+Bool bt_is_always_left(BSTree *tree) {
+
+  if (!tree) {
+    return TRUE;
+  }
+
+  return bt_is_always_left_rec(root(tree));
+}
+
+Bool bt_is_always_left_rec(BSTNode *node) {
+
+  if (!right(node) && !left(node)) {
+    return TRUE;
+  } else if (left(node)) {
+    return FALSE;
+  }
+  return bt_is_always_left_rec(right(node));
+}*/
