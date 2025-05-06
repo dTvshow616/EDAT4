@@ -1,4 +1,4 @@
-########################################################
+################################################################################
 CC=gcc
 CFLAGS=-Wall -ggdb -Werror -Wpedantic -ansi
 IFLAGS=-I./
@@ -6,52 +6,45 @@ LDFLAGS=-L./
 LDLIBS=
 # -lm enlaza la biblioteca matematica, -pthread enlaza la biblioteca de hilos
 LIBS = -lm -pthread
-EJS = p4_e1a.o p4_e1a p4_e1b.o p4_e1b p4_e2a.o p4_e2a p4_e2b.o p4_e2b p4_e3.o p4_e3
+EJS = p4_e1 p4_e2 p4_e3
+OBJS = p4_e1.o p4_e2.o p4_e3.o
 OTROS = bstree.o vertex.o
-######################################################################
+################################################################################
 # $@ es el item que aparece a la izquierda de ':'
 # $< es el primer item en la lista de dependencias
 # $^ son todos los archivos que se encuentran a la derecha de ':' (dependencias)
-########################################################################
+################################################################################
 include makefile_ext
-########################################################################
+################################################################################
 
-all: $(EJS) $(OTROS)
+all: $(EJS) $(OTROS) $(OBJS)
 
-# Ejercicio 1
-p4_e1a: p4_e1a.o bstree.o vertex.o
+# ------------------------------- Ejercicio 1 -------------------------------- #
+
+p4_e1: p4_e1.o bstree.o vertex.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) $(LIBS)
 
-p4_e1a.o: p4_e1a.c bstree.h vertex.h types.h
+p4_e1.o: p4_e1.c bstree.h vertex.h types.h
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
-p4_e1b: p4_e1b.o 
-	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) $(LIBS)
+# ------------------------------- Ejercicio 2 -------------------------------- #
 
-p4_e1b.o: p4_e1b.c 
-	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
-
-# Ejercicio 2
-p4_e2a: p4_e2a.o 
+p4_e2: p4_e2.o file_utils.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-p4_e2a.o: p4_e2a.c 
+p4_e2.o: p4_e2a.c file_utils.h
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
-p4_e2b: p4_e2b.o 
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
+# ------------------------------- Ejercicio 3 -------------------------------- #
 
-p4_e2b.o: p4_e2b.c 
-	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
-
-# Ejercicio 3
-p4_e3: p4_e3.o 
+p4_e3: p4_e3.o file_utils.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) $(LIBS)
 
-p4_e3.o: p4_e3.c
+p4_e3.o: p4_e3.c file_utils.h
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
-# Archivos necesarios para los ejercicios 
+# ----------------- Archivos necesarios para los ejercicios ------------------ #
+
 file_utils.o: file_utils.c file_utils.h
 	$(CC) $(CFLAGS) -c file_utils.c
 
@@ -60,6 +53,8 @@ vertex.o: vertex.c vertex.h
 
 bstree.o: bstree.c bstree.h
 	$(CC) $(CFLAGS) -c bstree.c
+
+# ---------------------------- Comandos del make ----------------------------- #
 
 clear:
 	rm -rf *.o 
