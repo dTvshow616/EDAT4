@@ -3,23 +3,25 @@
 
 #include "types.h"
 
-/*NOTE - Hay que mover las estructuras*/
+/**
+ * BSTree type definition: a binary search of arbitrary elements.
+ */
+typedef struct _BSTree BSTree;
+
+typedef struct _BSTNode BSTNode;
+
+/*TODO - Descomentar las estructuras para que sean privadas*/
+struct _BSTNode {
+  void *info;
+  struct BSTNode *left;
+  struct BSTNode *right;
+};
+
 struct _BSTree {
   BSTNode *root;
   P_ele_print print_ele;
   P_ele_cmp cmp_ele;
 };
-
-typedef struct _BSTNode {
-  void *info;
-  struct BSTNode *left;
-  struct BSTNode *right;
-} BSTNode;
-
-/**
- * BSTree type definition: a binary search of arbitrary elements.
- */
-typedef struct _BSTree BSTree;
 
 /**
  * @brief Public function that creates a new BSTree.

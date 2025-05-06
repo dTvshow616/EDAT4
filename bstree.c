@@ -7,6 +7,18 @@
 #define root(pt) ((pt)->root)
 #define cmp(pt) ((pt)->cmp_ele)
 
+/*struct _BSTNode {
+  void *info;
+  struct BSTNode *left;
+  struct BSTNode *right;
+};
+
+struct _BSTree {
+  BSTNode *root;
+  P_ele_print print_ele;
+  P_ele_cmp cmp_ele;
+};*/
+
 /*Privadas*/
 void _bt_free_rec(BSTNode *pn);
 BSTNode *_bst_insert_rec(BSTNode *pn, const void *e, int (*ele_cmp)(const void *, const void *));
@@ -272,6 +284,14 @@ void *tree_find_min(BSTree *tree) {
 
   node = root(tree);
   /*Nos vamos a left pq nuestro arbol tiene el min a la izq*/
+  while (left(node)) {
+    node = left(node);
+  }
+
+  return info(node);
+}
+
+void *tree_find_min_rec(BSTNode *node) {
   while (left(node)) {
     node = left(node);
   }
