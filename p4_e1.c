@@ -9,15 +9,6 @@
 
 #define MAX_LINE 150
 
-/**Ejercicio 1a: Implementación de las primitivas de mínimo, máximo, contenido e inserción
-Se pide implementar las siguientes primitivas públicas del TAD BST, junto con sus correspondientes funciones privadas (recursivas), y cuya definición
-completa se encuentra en bstree.h:
-  - tree_find_min: devuelve el elemento más pequeño almacenado en el árbol.
-  - tree_find_max: devuelve el elemento más grande almacenado en el árbol.
-  - tree_contains: comprueba si un elemento existe en el árbol.
-  - tree_insert: inserta un nuevo elemento en el árbol (si el elemento ya se encuentra en el árbol no se debe insertar, pero la función devolverá OK).
-*/
-
 void freeData(Vertex **data, int n) {
   int i;
 
@@ -195,7 +186,6 @@ int main(int argc, char const *argv[]) {
     t = loadBalancedTree(data, n);
     time = clock() - time;
   }
-
   if (!t) {
     freeData(data, n);
     exit(EXIT_FAILURE);

@@ -26,6 +26,12 @@ struct _BSTree {
 };
 /* END [_BSTree] */
 
+/* Privadas */
+Bool bt_is_always_right(BSTree *tree);
+Bool bt_is_always_right_rec(BSTNode *node);
+Bool bt_is_always_left(BSTree *tree);
+Bool bt_is_always_left_rec(BSTNode *node);
+
 /*** BSTNode TAD private functions ***/
 BSTNode *_bst_node_new() {
   BSTNode *pn = NULL;
@@ -214,49 +220,54 @@ int tree_postOrder(FILE *f, const BSTree *tree) {
 
 /**** TODO: find_min, find_max, insert, contains, remove ****/
 BSTNode *_bst_find_min_rec(BSTNode *pn) {
-  /*TODO - */
-  while (left(pn)) {
-    pn = left(pn);
+  /*REVIEW - p4_e1a*/
+  if (!left(pn)) {
+    return pn;
   }
 
-  return info(pn);
+  pn = left(pn);
+
+  return _bst_find_min_rec(pn);
 }
 
 BSTNode *_bst_find_max_rec(BSTNode *pn) {
-  /*TODO - */
-  while (right(pn)) {
-    pn = right(pn);
+  /*REVIEW - p4_e1a*/
+  if (!right(pn)) {
+    return pn;
   }
 
-  return pn;
+  pn = right(pn);
+
+  return _bst_find_min_rec(pn);
 }
 
 Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
-  int cmp, depth;
+  /*REVIEW - p4_e1a*/
+  int cmp;
   if (!pn) {
     return FALSE;
   }
 
-  cmp = cmp_ele(info(pn), elem);
+  cmp = cmp_elem(info(pn), elem);
 
   if (cmp == 0) {
     return TRUE;
   } else if (cmp > 0) {
     /*El elemento es mayor que el buscado*/
-    tree_contains_recursive(right(pn), elem, cmp_ele);
+    _bst_contains_rec(right(pn), elem, cmp_elem);
   } else {
     /*El elemento es menor que el buscado*/
-    tree_contains_recursive(left(pn), elem, cmp_ele);
+    _bst_contains_rec(left(pn), elem, cmp_elem);
   }
 
   return FALSE;
 }
 
 BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
-  /*REVIEW - */
+  /*REVIEW - p4_e1a*/
   int cmp;
   if (pn == NULL) {
-    pn = node_new();
+    pn = _bst_node_new();
     if (pn == NULL) {
       return NULL;
     }
@@ -266,21 +277,111 @@ BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
     return pn;
   }
 
-  cmp = ele_cmp(elem, info(pn));
+  cmp = cmp_elem(elem, info(pn));
 
   if (cmp < 0) {
-    left(pn) = _bst_insert_rec(left(pn), elem, ele_cmp);
+    left(pn) = _bst_insert_rec(left(pn), elem, cmp_elem);
   } else if (cmp > 0) {
-    right(pn) = _bst_insert_rec(right(pn), elem, ele_cmp);
+    right(pn) = _bst_insert_rec(right(pn), elem, cmp_elem);
   }
 
   return pn;
 }
 
-BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) { /*REVIEW - Esta función la he metido yo*/ /*TODO - */ }
+/*Lo primero que hará será comparar el elemento recibido con el campo info del nodo, usando la función de comparación. Si el elemento que se busca es
+  menor que el que tiene el nodo continuará buscando en su subárbol izquierdo, y si es mayor en el subárbol derecho. En caso de que el elemento
+  buscado esté en el nodo actual habrá que eliminarlo, y se dan tres posibles situaciones:
+  - Si el nodo no tiene ningún hijo simplemente se libera.
+  - Si tiene solo un hijo, ya sea izquierdo o derecho, se libera el nodo y se deja en su lugar a su hijo.
+  - En caso de tener dos hijos, hay que reemplazarlo por el siguiente elemento más grande, que será siempre el elemento mínimo del subárbol derecho
+  (el elemento más pequeño del subárbol en el que todos los elementos son mayores que el elemento actual). Una vez reemplazado, se elimina el elemento
+  del subárbol derecho, ya que ha cambiado de posición. En cualquiera de los casos, la función devolverá un puntero al nodo que se quedará en esa
+  posición del árbol, ya sea el nodo original, uno de sus hijos, o NULL si la posición queda vacía.
+  A continuación,*/
+BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
+  /*REVIEW - p4_e1b*/
+  BSTNode *ret_node, *aux_node;
+  if (!pn) {
+    return NULL;
+  }
+  /*Comparación de elem con la información del nodo actual*/
+  if (cmp_elem(elem, info(pn)) < 0) {
+    /*Buscar en el subárbol izquierdo*/
+    left(pn) = _bst_remove_rec(left(pn), elem, cmp_elem);
+
+  } else if (cmp_elem(elem, info(pn)) > 0) {
+    /*Buscar en el subárbol derecho*/
+    right(pn) = _bst_remove_rec(right(pn), elem, cmp_elem);
+
+  } else if (cmp_elem(elem, info(pn)) == 0) {
+    /*Se ha encontrado el elemento que se va a eliminar*/
+  }
+
+  if (_bst_depth_rec(pn) == 0) {
+    _bst_node_free(pn);
+    return NULL;
+
+  } else if (bt_is_always_right_rec(pn) == TRUE) {
+    ret_node = right(pn);
+    _bst_node_free(pn);
+    return ret_node;
+
+  } else if (bt_is_always_left_rec(pn) == TRUE) {
+    ret_node = left(pn);
+    _bst_node_free(pn);
+    return ret_node;
+
+  } else if ((bt_is_always_right_rec(pn) == FALSE) && (bt_is_always_left_rec(pn) == FALSE)) {
+    /*Se libera pn y se reemplaza por el mínimo el subárbol derecho, que se elimina de su posición actual*/
+    aux_node = _bst_find_min_rec(right(pn));
+    info(pn) = info(aux_node);
+    right(pn) = _bst_remove_rec(right(pn), info(aux_node), cmp_elem);
+    return pn;
+  }
+
+  return pn;
+}
+
+Bool bt_is_always_right(BSTree *tree) {
+  /*REVIEW - la he metido yo*/
+  if (!tree) {
+    return TRUE;
+  }
+
+  return bt_is_always_right_rec(root(tree));
+}
+
+Bool bt_is_always_right_rec(BSTNode *node) {
+  /*REVIEW - la he metido yo*/
+  if (!right(node) && !left(node)) {
+    return TRUE;
+  } else if (left(node)) {
+    return FALSE;
+  }
+  return bt_is_always_right_rec(right(node));
+}
+
+Bool bt_is_always_left(BSTree *tree) {
+  /*REVIEW - la he metido yo*/
+  if (!tree) {
+    return TRUE;
+  }
+
+  return bt_is_always_left_rec(root(tree));
+}
+
+Bool bt_is_always_left_rec(BSTNode *node) {
+  /*REVIEW - la he metido yo*/
+  if (!right(node) && !left(node)) {
+    return TRUE;
+  } else if (left(node)) {
+    return FALSE;
+  }
+  return bt_is_always_left_rec(right(node));
+}
 
 void *tree_find_min(BSTree *tree) {
-  /*REVIEW - */
+  /*REVIEW - p4_e1a*/
   BSTNode *node;
   /*Podemos usar recursión pero no hace falta*/
   /*Falta CdE*/
@@ -295,7 +396,7 @@ void *tree_find_min(BSTree *tree) {
 }
 
 void *tree_find_max(BSTree *tree) {
-  /*REVIEW - */
+  /*REVIEW - p4_e1a*/
   BSTNode *node;
   /*Podemos usar recursión pero no hace falta*/
   /*Falta CdE*/
@@ -310,18 +411,29 @@ void *tree_find_max(BSTree *tree) {
 }
 
 Bool tree_contains(BSTree *tree, const void *elem) {
-  /*REVIEW - */
-  P_ele_cmp *cmp_ele;
+  /*REVIEW - p4_e1a*/
+  P_ele_cmp cmp_ele = NULL;
 
-  return _bst_remove_rec(root(tree), elem, cmp_ele);
+  return _bst_contains_rec(root(tree), elem, cmp_ele);
 }
 
 Status tree_insert(BSTree *tree, const void *elem) {
-  /*REVIEW - */
-  P_ele_cmp *cmp_ele;
+  /*REVIEW - p4_e1a*/
+  P_ele_cmp cmp_ele = NULL;
 
   _bst_insert_rec(root(tree), elem, cmp_ele);
   return OK;
 }
 
-Status tree_remove(BSTree *tree, const void *elem) { /*TODO - */ }
+Status tree_remove(BSTree *tree, const void *elem) {
+  /*REVIEW - p4_e1b*/
+  P_ele_cmp cmp_ele = NULL;
+
+  if (!tree || (tree_isEmpty(tree) == TRUE)) {
+    return OK;
+  }
+
+  _bst_remove_rec(root(tree), elem, cmp_ele); /*Hay que hacer algo con este return??*/
+
+  return OK;
+}
