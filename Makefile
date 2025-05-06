@@ -6,7 +6,7 @@ LDFLAGS=-L./
 LDLIBS=-lstack -lqueue
 # -lm enlaza la biblioteca matematica, -pthread enlaza la biblioteca de hilos
 LIBS = -lm -pthread
-EJS = p3_e1.o p3_e1 p3_e2a.o p3_e2a p3_e2b.o p3_e2b p3_e3.o p3_e3
+EJS = 
 OTROS = queue.o list.o delivery.o
 ######################################################################
 # $@ es el item que aparece a la izquierda de ':'

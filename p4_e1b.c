@@ -22,7 +22,20 @@ En cualquiera de los casos, la función devolverá un puntero al nodo que se que
 hijos, o NULL si la posición queda vacía. A continuación, se proporciona un pseudocódigo para la función privada recursiva _bst_remove_rec:
 */
 
-_bst_remove_rec(BSTree* pn, void* elem, f(cmp_elem)) {
+Bool bt_is_always_right(BSTree *tree);
+Bool bt_is_always_right_rec(BSTNode *node);
+Bool bt_is_always_left(BSTree *tree);
+Bool bt_is_always_left_rec(BSTNode *node);
+
+int main(int argc, char const *argv[]) {
+  P_ele_cmp *cmp_ele;
+  BSTree *tree;
+  void *elem;
+
+  _bst_remove_rec(tree, elem, cmp_ele);
+}
+
+_bst_remove_rec(BSTree *pn, void *elem, int (*cmp_ele)(const void *, const void *)) {
   BSTNode *ret_node, *aux_node;
   if (!pn) {
     return NULL;
@@ -31,31 +44,65 @@ _bst_remove_rec(BSTree* pn, void* elem, f(cmp_elem)) {
   /*Comparación de elem con la información del nodo actual*/
   if (elem < pn->root->info) {
     /*Buscar en el subárbol izquierdo*/
-    pn->root->left = _bst_remove_rec(pn->root->left, elem, cmp_elem);
+    pn->root->left = _bst_remove_rec(pn->root->left, elem, cmp_ele);
 
   } else if (elem > pn->root->info) {
     /*Buscar en el subárbol derecho*/
-    pn->root->right = _bst_remove_rec(pn->root->right, elem, cmp_elem);
+    pn->root->right = _bst_remove_rec(pn->root->right, elem, cmp_ele);
   } else if (elem == pn->root->info) {
     /*Se ha encontrado el elemento que se va a eliminar*/
   }
-  if (/*Tree has no sons*/) {
+  if (tree_depth(pn) == 0) {
     _bst_node_free(pn);
     return NULL;
-  } else if (/*Tree only has right sons*/) {
+  } else if (bt_is_always_right(pn) == TRUE) {
     ret_node = pn->root->right;
     _bst_node_free(pn);
     return ret_node;
-  } else if (/*Tree only has left sons*/) {
+  } else if (bt_is_always_left(pn) == TRUE) {
     ret_node = pn->root->left;
     _bst_node_free(pn);
     return ret_node;
-  } else if (/*Tree has left and right sons*/) {
+  } else if ((bt_is_always_right(pn) == FALSE) && (bt_is_always_right(pn) == FALSE) && (tree_isEmpty(pn) == FALSE)) {
     /*Se libera pn y se reemplaza por el mínimo el subárbol derecho, que se elimina de su posición actual*/
     aux_node = _bst_find_min_rec(pn->root->right);
     pn->root->info = aux_node->info;
-    pn->root->right = _bst_remove_rec(pn->root->right, aux_node->info, cmp_elem);
+    pn->root->right = _bst_remove_rec(pn->root->right, aux_node->info, cmp_ele);
     return pn;
   }
   return pn;
+}
+
+Bool bt_is_always_right(BSTree *tree) {
+  if (!tree) {
+    return TRUE;
+  }
+
+  return bt_is_always_right_rec(root(tree));
+}
+
+Bool bt_is_always_right_rec(BSTNode *node) {
+  if (!right(node) && !left(node)) {
+    return TRUE;
+  } else if (left(node)) {
+    return FALSE;
+  }
+  return bt_is_always_right_rec(right(node));
+}
+
+Bool bt_is_always_left(BSTree *tree) {
+  if (!tree) {
+    return TRUE;
+  }
+
+  return bt_is_always_left_rec(root(tree));
+}
+
+Bool bt_is_always_left_rec(BSTNode *node) {
+  if (!right(node) && !left(node)) {
+    return TRUE;
+  } else if (left(node)) {
+    return FALSE;
+  }
+  return bt_is_always_left_rec(right(node));
 }

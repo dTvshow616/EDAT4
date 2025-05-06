@@ -22,3 +22,5 @@ Reflexiones sobre el TAD SQ
 anterior?
  ¿Qué coste (aproximado) tiene la operación de extraer un elemento en el TAD SQ?
 ¿Sería posible hacer que esta operación fuera 𝒪(1)?*/
+
+RECIBE FICH DE ENTRADA Y DE SALIDA

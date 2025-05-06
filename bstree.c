@@ -166,7 +166,6 @@ size_t tree_size(const BSTree *tree) {
   tree_size_recursive(root(tree));
 }
 
-/*TODO - Poner cabecera arriba*/
 size_t tree_size_recursive(const BSTNode *node) {
   if (!node) {
     return 0;
@@ -267,11 +266,17 @@ int tree_postOrder(FILE *f, const BSTree *tree) {
  * @return Pointer to the minimum element if found, NULL otherwise.
  */
 void *tree_find_min(BSTree *tree) {
-  /*TODO - */
-  int i = 0;
+  BSTNode *node;
+  /*Podemos usar recursión pero no hace falta*/
+  /*Falta CdE*/
 
-  for (i = 0; i < tree_depth(tree); i++) {
+  node = root(tree);
+  /*Nos vamos a left pq nuestro arbol tiene el min a la izq*/
+  while (left(node)) {
+    node = left(node);
   }
+
+  return info(node);
 }
 
 /**
@@ -286,7 +291,19 @@ void *tree_find_min(BSTree *tree) {
  *
  * @return Pointer to the maximum element if found, NULL otherwise.
  */
-void *tree_find_max(BSTree *tree) { /*TODO - */ }
+void *tree_find_max(BSTree *tree) {
+  BSTNode *node;
+  /*Podemos usar recursión pero no hace falta*/
+  /*Falta CdE*/
+
+  node = root(tree);
+  /*Nos vamos a left pq nuestro arbol tiene el min a la izq*/
+  while (right(node)) {
+    node = right(node);
+  }
+
+  return info(node);
+}
 
 /**
  * @brief Public function that tells if an element is in a Binary Search Tree.
@@ -342,23 +359,16 @@ BSTNode *_bst_search_rec(BSTNode *pn, void *e, int (*ele_cmp)(const void *, cons
  * already in the BST, Status value ERROR otherwise.
  */
 Status tree_insert(BSTree *tree, const void *elem) {
-  BSTNode *root;
-  if ((tree == NULL) || (elem == NULL)) {
-    return ERROR;
-  }
+  /*REVIEW - */
+  P_ele_cmp *cmp_ele;
 
-  root = _bst_insert_rec(root(tree), elem, cmp(tree));
-  if (root == NULL) {
-    return ERROR;
-  }
-
-  root(tree) = root;
-
+  _bst_insert_rec(root(tree), elem, cmp_ele);
   return OK;
 }
 
 /*Privada*/
 BSTNode *_bst_insert_rec(BSTNode *pn, const void *e, int (*ele_cmp)(const void *, const void *)) {
+  /*REVIEW - */
   int cmp;
   if (pn == NULL) {
     pn = node_new();
@@ -405,193 +415,29 @@ Status tree_remove(BSTree *tree, const void *elem);
  tree_insert: inserta un nuevo elemento en el árbol (si el elemento ya se encuentra
 en el árbol no se debe insertar, pero la función devolverá OK).*/
 
-/*tree_find_min: devuelve el elemento más pequeño almacenado en el árbol.*/
-void *tree_find_min(BSTree *tree) {
-  BSTNode *node;
-  /*Podemos usar recursión pero no hace falta*/
-  /*Falta CdE*/
+Bool tree_contains(BSTree *tree, const void *e) {
+  P_ele_cmp *cmp_ele;
 
-  node = root(tree);
-  /*Nos vamos a left pq nuestro arbol tiene el min a la izq*/
-  while (left(node)) {
-    node = left(node);
-  }
-
-  return info(node);
+  return tree_search_depth_recursive(root(tree), e, cmp_ele);
 }
 
-void *tree_find_max(BSTree *tree) {
-  BSTNode *node;
-  /*Podemos usar recursión pero no hace falta*/
-  /*Falta CdE*/
-
-  node = root(tree);
-  /*Nos vamos a left pq nuestro arbol tiene el min a la izq*/
-  while (right(node)) {
-    node = right(node);
-  }
-
-  return info(node);
-}
-Bool tree_contains(); /*TODO - */
-Status tree_insert(); /*TODO - */
-
-/*NOTE - Inicio*/
-/*Esto no es de prácticas, es extra de clase*/
-int tree_num_leaves_recursive(BSTNode *node) {
+Bool tree_search_depth_recursive(BSTNode *node, void *e, int (*P_ele_cmp)(void *, void *)) {
+  int cmp, depth;
   if (!node) {
-    return 0;
-  }
-
-  /*Root no es una hoja*/
-  if (!(left(node)) && !(right(node))) {
-    return 1;
-  }
-
-  return tree_num_leaves_recursive(left(node)) + tree_num_leaves_recursive(right(node));
-}
-
-/* [!] Sólo para árboles de números */
-int tree_sum_nodes_recursive(BSTNode *node) {
-  if (!node) {
-    return 0;
-  }
-
-  /* El casting raro de *(int*) es pq info es un puntero void* */
-  return tree_sum_nodes_recursive(left(node)) + tree_sum_nodes_recursive(right(node)) + *((int *)(info(node)));
-}
-
-/*Sirve para ver si un árbol es estrictamente binario*/
-Bool tree_is_stricly_binary(BSTNode *node) {
-  /* Un árbol vacío es binario */
-  if (!node) {
-    return TRUE;
-  }
-
-  /* Si un nodo no tiene hijos es binario */
-  if ((!left(node)) && (!right(node))) {
-    return TRUE;
-  }
-
-  /* Si le falta un hijo no es binario */
-  if (((!left(node)) && (right(node))) || ((left(node)) && (!right(node)))) {
     return FALSE;
   }
 
-  if (tree_is_stricly_binary(left(node)) == TRUE && tree_is_stricly_binary(right(node)) == TRUE) {
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
-/*Mira si tiene todos los niveles ocupados, es para binarios*/
-Bool tree_is_complete(BSTNode *node) {
-  if (!node) {
-    return TRUE;
-  }
-
-  if (tree_num_leaves_recursive(node) == 2 ^ tree_depth_recursive(node)) { /*Lo de elevar supongo que se hace con un for*/
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
-/*Tiene profundidad máxima, es una función de visitas*/
-void tree_preoder_limited_recursive(BSTNode *node, int max_depth, void (*ele_visit)(const void *)) { /*Lo último es la función de visita*/
-  if (!node) {
-    return;
-  }
-
-  if (max_depth < 0) { /*Esto es pq el root depth = 0*/
-    return;
-  }
-
-  /*Como es preorder lo primero que hago es visitar el nodo*/
-  ele_visit(info(node));
-
-  /*Tienes que saber en qué profundidad te encuentras ahora o cuántos niveles te quedan por explorar, usamos lo 2º*/
-  /*Le quito 1 pq ya he explorado un nivel*/
-  tree_preoder_limited_recursive(left(node), max_depth - 1, ele_visit);
-  tree_preoder_limited_recursive(right(node), max_depth - 1, ele_visit);
-
-  /*Podría hacer sólo un ele_visit si max_depth = 0 para evitar funciones pero no vale la pena*/
-
-  return;
-}
-
-/*Hace que un árbol se convierta en su imagen refleja*/
-/*    a              a
-     / \            / \
-    b   c   -->    c   b
-   / \                / \
-  d   e              e   d
-*/
-void tree_mirror_recursive(BSTNode *node) {
-  BSTNode *aux_node;
-  if (!node) {
-    return;
-  }
-
-  /*Permutamos: left <=> right*/
-  aux_node = right(node);
-  right(node) = left(node);
-  left(node) = aux_node;
-
-  tree_mirror_recursive(left(node));
-  tree_mirror_recursive(right(node));
-}
-
-/*Los árboles tienen el min a la izq y el max a la dch, pueden caer ejercicios de ordenar*/
-void tree_search_depth(BSTree *tree, const void *e);
-
-int tree_search_depth_recursive(BSTNode *node, void *e, int (*ele_cmp)(void *, void *)) {
-  int cmp, depth;
-  if (!node) {
-    return -1;
-  }
-
-  cmp = ele_cmp(info(node), e);
+  cmp = cmp_ele(info(node), e);
 
   if (cmp == 0) {
-    return 0;
+    return TRUE;
   } else if (cmp > 0) {
     /*El elemento es mayor que el buscado*/
-    depth = tree_search_depth_recursive(right(node), e, ele_cmp);
+    tree_search_depth_recursive(right(node), e, cmp_ele);
   } else {
     /*El elemento es menor que el buscado*/
-    depth = tree_search_depth_recursive(left(node), e, ele_cmp);
-  }
-
-  if (depth == -1) {
-    return -1;
-  } else {
-    /*Por lo del root, no podemos sumarlo siempre pq si falla el sumar 1 nos trastoca todo*/
-    return depth + 1;
+    tree_search_depth_recursive(left(node), e, cmp_ele);
   }
 
   return -1;
 }
-
-/*Comprueba si el árbol es un árbol binario de búsqueda*/
-Bool tree_check_recursive(BSTNode *node, void *min, void *max, int (*ele_cmp)(void *, void *)) { /*Mierda de nombre*/
-  /*Todos los nodos de la izq tienen que ser <root y  > su hermano, y los de la dch >root y < su hermano*/
-  /*min es cota inferior y max es cota superior*/
-
-  if (!node) {
-    return TRUE;
-  }
-
-  /*node tiene que ser mayor que el mínimo y menor que el máximo*/
-  if ((elecmp(info(node), min) < 0) || (elecmp(info(node), max) > 0)) {
-    return FALSE;
-  }
-
-  /*Comprobamos sus hijos*/
-  if ((tree_check_recursive(left(node), min, info(node), ele_cmp) == TRUE) && (tree_check_recursive(right(node), info(node), max, ele_cmp == TRUE))) {
-    return TRUE;
-  }
-}
-
-/*NOTE - Fin*/
