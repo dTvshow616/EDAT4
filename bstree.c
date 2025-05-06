@@ -334,6 +334,9 @@ BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   return pn;
 }
 
+/**
+ * @brief Public function that finds the minimum element in a Binary Search Tree.
+ */
 void *tree_find_min(BSTree *tree) {
   /*REVIEW - p4_e1a*/
   BSTNode *node;
@@ -350,6 +353,9 @@ void *tree_find_min(BSTree *tree) {
   return info(node);
 }
 
+/**
+ * @brief Public function that finds the maximum element in a Binary Search Tree.
+ */
 void *tree_find_max(BSTree *tree) {
   /*REVIEW - p4_e1a*/
   BSTNode *node;
@@ -366,6 +372,14 @@ void *tree_find_max(BSTree *tree) {
   return info(node);
 }
 
+/**
+ * @brief Public function that tells if an element is in a Binary Search Tree.
+ *
+ * @param tree Pointer to the Tree.
+ * @param elem Pointer to the element to be found in the Tree.
+ *
+ * @return Bool value TRUE if the element was found, FALSE otherwise.
+ */
 Bool tree_contains(BSTree *tree, const void *elem) {
   /*REVIEW - p4_e1a*/
   if (!tree || !elem || !cmp(tree)) {
@@ -375,6 +389,22 @@ Bool tree_contains(BSTree *tree, const void *elem) {
   return _bst_contains_rec(root(tree), elem, cmp(tree));
 }
 
+/**
+ * @brief Public function that inserts an element into a Binary Search Tree.
+ *
+ * Inserts as a leaf the pointer of the element received as argument. If the
+ * element is already in the BST it returns OK.
+ *
+ * Note that it is necessary to descend the subtree to obtain the
+ * insert position. So this operation is linear with the length of the path
+ * from the leaf to the root.
+ *
+ * @param tree Pointer to the Tree.
+ * @param elem Pointer to the element to be inserted into the Tree.
+ *
+ * @return Status value OK if the insertion could be done or the element was
+ * already in the BST, Status value ERROR otherwise.
+ */
 Status tree_insert(BSTree *tree, const void *elem) {
   /*REVIEW - p4_e1a*/
   BSTNode *new_root;
@@ -393,6 +423,21 @@ Status tree_insert(BSTree *tree, const void *elem) {
   return OK;
 }
 
+/**
+ * @brief Public function that removes an element into a Binary Search Tree.
+ *
+ * Removes the (first) occurrence of the element received as argument.
+ *
+ * Note that it is necessary to descend the subtree to obtain the
+ * remove position. So this operation is linear with the length of the path
+ * from the leaf to the root.
+ *
+ * @param tree Pointer to the Tree.
+ * @param elem Pointer to the element to be removed from the Tree.
+ *
+ * @return Status value OK if the removal could be done or the element was not
+ * in the BST, Status value ERROR otherwise.
+ */
 Status tree_remove(BSTree *tree, const void *elem) {
   /*REVIEW - p4_e1b*/
   if (!tree || (tree_isEmpty(tree) == TRUE)) {
