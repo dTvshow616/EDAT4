@@ -256,25 +256,52 @@ Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   return FALSE;
 }
 
+/**
+ * @brief Public function that inserts an element into a Binary Search Tree.
+ *
+ * Inserts as a leaf the pointer of the element received as argument. If the
+ * element is already in the BST it returns OK.
+ *
+ * Note that it is necessary to descend the subtree to obtain the
+ * insert position. So this operation is linear with the length of the path
+ * from the leaf to the root.
+ *
+ * @return Status value OK if the insertion could be done or the element was
+ * already in the BST, Status value ERROR otherwise.
+ */
+/*a
+b   c
+    d e*/
 BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   /*REVIEW - p4_e1a*/
+  BSTNode *new_node = NULL;
   int cmp;
 
+  /*If the tree is empty, return a new node*/
   if (!pn) {
-    BSTNode *new_node = _bst_node_new();
-    if (!new_node) return NULL;
+    new_node = _bst_node_new();
+    if (!new_node) {
+      return NULL;
+    }
     new_node->info = (void *)elem;
     return new_node;
   }
 
-  cmp = cmp_elem(elem, pn->info);
+  cmp = cmp_elem(pn->info, elem);
 
-  if (cmp < 0) {
-    pn->left = _bst_insert_rec(pn->left, elem, cmp_elem);
-  } else if (cmp > 0) {
+  /*If the key is already present in the tree, return the node*/
+  if (cmp == 0) {
+    return pn;
+  } else if (cmp < 0) {
+    /*Otherwise, recur down the tree. If the key to be inserted is greater than the node's key, insert it in the right subtree*/
     pn->right = _bst_insert_rec(pn->right, elem, cmp_elem);
+
+  } else {
+    /*If the key to be inserted is smaller than the node's key,insert it in the left subtree*/
+    pn->left = _bst_insert_rec(pn->left, elem, cmp_elem);
   }
 
+  /*Return the (unchanged) node pointer*/
   return pn;
 }
 
