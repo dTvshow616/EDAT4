@@ -29,10 +29,10 @@ p4_e1.o: p4_e1.c bstree.h vertex.h types.h
 
 # ------------------------------- Ejercicio 2 -------------------------------- #
 
-p4_e2: p4_e2.o file_utils.o search_queue.o
+p4_e2: p4_e2.o file_utils.o search_queue.o bstree.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-p4_e2.o: p4_e2.c file_utils.h search_queue.h 
+p4_e2.o: p4_e2.c file_utils.h search_queue.h bstree.h 
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
 # ------------------------------- Ejercicio 3 -------------------------------- #

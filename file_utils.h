@@ -53,6 +53,11 @@ void *str2int(const char *str);
 void *str2str(const char *str);
 // convert string to char pointer */
 void *str2chr(const char *str);
+/**  convert string to float pointer
+ *
+ * If error return NULL and print message in stderror
+ */
+void *str2float(const char *str); /*NOTE - Esta no estaba metida???*/
 
 //-----------------------------------------------------------
 //------- file functions utilities

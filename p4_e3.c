@@ -30,8 +30,8 @@ int main(int argc, char *argv[]) {
   /*TODO - */
   /*FILE *fich_notas = NULL;*/
   SearchQueue *search_queue;
-  P_ele_print print_ele = int_print;
-  P_ele_cmp cmp_ele = int_cmp;
+  P_ele_print print_ele = float_print;
+  P_ele_cmp cmp_ele = float_cmp;
   /*char line[1024];*/
   int i = 0;
   void *top_grade = NULL;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  if (read_tad_from_file(search_queue, argv[1], str2int, w_search_queue_push, w_search_queue_isEmpty) == ERROR) {
+  if (read_tad_from_file(search_queue, argv[1], str2float, w_search_queue_push, w_search_queue_isEmpty) == ERROR) {
     return 1;
   }
   printf("WHY DOESN'T THIS WORK FFS\n");
