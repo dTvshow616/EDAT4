@@ -83,9 +83,9 @@ run:
 	@echo " "
 	./p4_e2 $(DATA)/data_string_10.txt $(EJ2)/data_string_10.txt
 	@echo " "
-	./p4_e2 $(DATA)/data_string_1K.txt $(EJ2)data_string_1K.txt
+	./p4_e2 $(DATA)/data_string_1K.txt $(EJ2)/data_string_1K.txt
 	@echo " "
-	./p4_e2 $(DATA)/data_string_2K.txt $(EJ2)data_string_2K.txt
+	./p4_e2 $(DATA)/data_string_2K.txt $(EJ2)/data_string_2K.txt
 	@echo " "
 
 	@echo ">>>>>>Running p4_e3"
