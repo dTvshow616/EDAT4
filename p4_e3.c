@@ -47,9 +47,10 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  if (read_tad_from_file(search_queue, argv[1], str2int, search_queue_push, search_queue_isEmpty) == ERROR) {
+  if (read_tad_from_file(search_queue, argv[1], str2int, w_search_queue_push, w_search_queue_isEmpty) == ERROR) {
     return 1;
   }
+  printf("WHY DOESN'T THIS WORK FFS\n");
 
   /* Todas las notas ordenadas de menor a mayor (usando search_queue_print).*/
   search_queue_print(stdout, search_queue);

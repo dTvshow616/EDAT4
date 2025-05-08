@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
   }
 
   /* A continuación, el programa leerá cada línea del fichero de entrada, insertando la cadena leída en una cola SQ.*/
-  if (read_tad_from_file(queue, argv[1], str2str, search_queue_push, search_queue_isEmpty) == ERROR) {
+  if (read_tad_from_file(queue, argv[1], str2str, w_search_queue_push, w_search_queue_isEmpty) == ERROR) {
     return 1;
   }
 

@@ -74,6 +74,11 @@ Bool search_queue_isEmpty(const SearchQueue *q) {
   return tree_isEmpty(q->data);
 }
 
+Bool w_search_queue_isEmpty(const void *tad) {
+  /*REVIEW - es para read_tad_from_file*/
+  return search_queue_isEmpty(tad);
+}
+
 /**
  * @brief This function is used to insert an element at the back position of a
  * SearchQueue. A reference to the element is added.
@@ -90,6 +95,11 @@ Status search_queue_push(SearchQueue *q, void *ele) {
   }
 
   return tree_insert(q->data, ele);
+}
+
+Status w_search_queue_push(void *tad, const void *ele) {
+  /*REVIEW - es para read_tad_from_file*/
+  return search_queue_push(tad, (void *)ele);
 }
 
 /**

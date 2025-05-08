@@ -37,10 +37,10 @@ p4_e2.o: p4_e2.c file_utils.h search_queue.h
 
 # ------------------------------- Ejercicio 3 -------------------------------- #
 
-p4_e3: p4_e3.o file_utils.o
+p4_e3: p4_e3.o file_utils.o search_queue.o bstree.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) $(LIBS)
 
-p4_e3.o: p4_e3.c file_utils.h
+p4_e3.o: p4_e3.c file_utils.h search_queue.h bstree.h
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
 # ----------------- Archivos necesarios para los ejercicios ------------------ #
