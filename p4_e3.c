@@ -33,6 +33,8 @@ int main(int argc, char *argv[]) {
   P_ele_print print_ele = int_print;
   P_ele_cmp cmp_ele = int_cmp;
   char line[1024];
+  int i = 0;
+  void *top_grade = NULL;
 
   fich_notas = fopen(argv[1], "r");
   if (!fich_notas) {
@@ -48,6 +50,26 @@ int main(int argc, char *argv[]) {
   while (fscanf(fich_notas, "%s", line) == 1) {
     if (search_queue_push(search_queue, line) == OK) {
     }
+  }
+
+  /* Todas las notas ordenadas de menor a mayor (usando search_queue_print).*/
+  search_queue_print(stdout, search_queue);
+
+  /* Media de las notas (con 2 cifras decimales).*/
+
+  /* Mediana de las notas (con 2 cifras decimales).*/
+
+  /* Tres notas más bajas (usando search_queue_pop, una a una).*/
+  for (i = 0; i < 3; i++) {
+    print_ele(stdout, search_queue_pop(search_queue));
+  }
+
+  /* Tres notas más altas (usando search_queue_getBack y eliminando la nota del árbol para evitar repetición).*/
+  for (i = 0; i < 3; i++) {
+    top_grade = search_queue_getBack(search_queue);
+    print_ele(stdout, top_grade);
+    free(top_grade);
+    top_grade = NULL;
   }
 
   fclose(fich_notas);

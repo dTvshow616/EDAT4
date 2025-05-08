@@ -51,6 +51,7 @@ void search_queue_free(SearchQueue *q) {
     return;
   }
 
+  tree_destroy(q->data);
   free(q);
   q = NULL;
 }
@@ -63,10 +64,16 @@ void search_queue_free(SearchQueue *q) {
  * @return TRUE if the SearchQueue is empty, FALSE if it is not.
  */
 Bool search_queue_isEmpty(const SearchQueue *q) {
-  /*TODO - */
+  /*REVIEW - */
   if (!q) {
     return TRUE;
   }
+
+  if (tree_isEmpty(q->data)) {
+    return TRUE;
+  }
+
+  return FALSE;
 }
 
 /**
@@ -78,7 +85,14 @@ Bool search_queue_isEmpty(const SearchQueue *q) {
  *
  * @return OK on success, ERROR otherwise.
  *  */
-Status search_queue_push(SearchQueue *q, void *ele) { /*TODO - */ }
+Status search_queue_push(SearchQueue *q, void *ele) {
+  /*REVIEW - */
+  if (!q || !ele) {
+    return ERROR;
+  }
+
+  return tree_insert(q->data, ele);
+}
 
 /**
  * @brief This function is used to extract an element from the front position of
@@ -89,7 +103,24 @@ Status search_queue_push(SearchQueue *q, void *ele) { /*TODO - */ }
  *
  * @return A pointer to the extracted element on success, NULL in case of error.
  * */
-void *search_queue_pop(SearchQueue *q) { /*TODO - */ }
+void *search_queue_pop(SearchQueue *q) {
+  void *ele = NULL;
+  /*REVIEW - */
+  if (!q) {
+    return NULL;
+  }
+
+  ele = tree_find_min(q->data);
+  if (!ele) {
+    return NULL;
+  }
+
+  if (tree_remove(q->data, ele) == ERROR) {
+    return NULL;
+  }
+
+  return ele;
+}
 
 /**
  * @brief This function is used to get a reference to the element in the front
@@ -112,7 +143,13 @@ void *search_queue_getFront(const SearchQueue *q) { /*TODO - */ }
  *
  * @return A pointer to the element in the back position, NULL in case of error.
  * */
-void *search_queue_getBack(const SearchQueue *q) { /*TODO - */ }
+void *search_queue_getBack(const SearchQueue *q) {
+  if (!q) {
+    return NULL;
+  }
+
+  return tree_find_max(q->data);
+}
 
 /**
  * @brief This function returns the size of a SearchQueue. Note that the
