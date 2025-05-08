@@ -28,6 +28,24 @@ struct _BSTree {
 };
 /* END [_BSTree] */
 
+P_ele_print *bst_get_print(BSTree *tree) {
+  /*REVIEW - La he metido yo para el e3*/
+  if (!tree) {
+    return NULL;
+  }
+
+  return &(tree->print_ele);
+}
+
+P_ele_cmp *bst_get_cmp(BSTree *tree) {
+  /*REVIEW - La he metido yo para el e3*/
+  if (!tree) {
+    return NULL;
+  }
+
+  return &(tree->cmp_ele);
+}
+
 /*** BSTNode TAD private functions ***/
 BSTNode *_bst_node_new() {
   BSTNode *pn = NULL;

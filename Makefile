@@ -1,6 +1,6 @@
 ################################################################################
 CC=gcc
-CFLAGS=-Wall -ggdb -Werror -Wpedantic -ansi
+CFLAGS=-Wall -ggdb -Werror -Wpedantic
 IFLAGS=-I./
 LDFLAGS=-L./
 LDLIBS=
@@ -8,7 +8,7 @@ LDLIBS=
 LIBS = -lm -pthread
 EJS = p4_e1 p4_e2 p4_e3
 OBJS = p4_e1.o p4_e2.o p4_e3.o
-OTROS = bstree.o vertex.o
+OTROS = bstree.o vertex.o search_queue.o
 ################################################################################
 # $@ es el item que aparece a la izquierda de ':'
 # $< es el primer item en la lista de dependencias
@@ -29,10 +29,10 @@ p4_e1.o: p4_e1.c bstree.h vertex.h types.h
 
 # ------------------------------- Ejercicio 2 -------------------------------- #
 
-p4_e2: p4_e2.o file_utils.o
+p4_e2: p4_e2.o file_utils.o search_queue.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-p4_e2.o: p4_e2a.c file_utils.h
+p4_e2.o: p4_e2.c file_utils.h search_queue.h 
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
 # ------------------------------- Ejercicio 3 -------------------------------- #
@@ -54,6 +54,9 @@ vertex.o: vertex.c vertex.h
 bstree.o: bstree.c bstree.h
 	$(CC) $(CFLAGS) -c bstree.c
 
+search_queue.o: search_queue.c search_queue.h bstree.h types.h
+	$(CC) $(CFLAGS) -c search_queue.c
+
 # ---------------------------- Comandos del make ----------------------------- #
 
 clear:
@@ -63,24 +66,42 @@ clean:
 	rm -f *.o
 
 run:
-	@echo ">>>>>>Running p4_e1a"
-	./p4_e1 requests.txt
-	
+	@echo ">>>>>>Running p4_e1"
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" normal
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" sorted
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" normal
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" sorted
 	@echo " "
 
-	@echo ">>>>>>Running p4_e1b"
-	./p4_e2a requests.txt
+	@echo ">>>>>>Running p4_e2"
+	@echo " "
+	./p4_e2 $(DATA)/data_string_10.txt $(OUT)/data_string_10.out
+	./p4_e2 $(DATA)/data_string_1K.txt $(OUT)/data_string_1K.out
+	./p4_e2 $(DATA)/data_string_2K.txt $(OUT)/data_string_2K.out
+	@echo " "
 
+	@echo ">>>>>>Running p4_e3"
+	@echo " "
+	./p4_e3 grades.txt
 	@echo " "
 
 runv:
-	@echo ">>>>>>Running p4_e1a with valgrind"
-	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1a
+	@echo ">>>>>>Running p4_e1 with valgrind"
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1
 
 	@echo " "
 
-	@echo ">>>>>>Running p4_e1b with valgrind"
-	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1b
+	@echo ">>>>>>Running p4_e2 with valgrind"
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e2
+
+	@echo " "
+
+	@echo ">>>>>>Running p4_e3 with valgrind"
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e3 grades.txt
 
 	@echo " "
 	

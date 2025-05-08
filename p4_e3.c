@@ -28,28 +28,27 @@ Highest grades: 9.90 9.20 8.50*/
 
 int main(int argc, char *argv[]) {
   /*TODO - */
-  FILE *fich_notas = NULL;
+  /*FILE *fich_notas = NULL;*/
   SearchQueue *search_queue;
   P_ele_print print_ele = int_print;
   P_ele_cmp cmp_ele = int_cmp;
-  char line[1024];
+  /*char line[1024];*/
   int i = 0;
   void *top_grade = NULL;
 
-  fich_notas = fopen(argv[1], "r");
+  /*fich_notas = fopen(argv[1], "r");
   if (!fich_notas) {
     return -1;
-  }
+  }*/
 
   search_queue = search_queue_new(print_ele, cmp_ele);
   if (!search_queue) {
-    fclose(fich_notas);
+    /*fclose(fich_notas);*/
     return -1;
   }
 
-  while (fscanf(fich_notas, "%s", line) == 1) {
-    if (search_queue_push(search_queue, line) == OK) {
-    }
+  if (read_tad_from_file(search_queue, argv[1], str2int, search_queue_push, search_queue_isEmpty) == ERROR) {
+    return 1;
   }
 
   /* Todas las notas ordenadas de menor a mayor (usando search_queue_print).*/
@@ -72,5 +71,5 @@ int main(int argc, char *argv[]) {
     top_grade = NULL;
   }
 
-  fclose(fich_notas);
+  /*fclose(fich_notas);*/
 }

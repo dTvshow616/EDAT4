@@ -8,6 +8,12 @@
  */
 typedef struct _BSTree BSTree;
 
+/*REVIEW - La he metido yo para el e3*/
+P_ele_print *bst_get_print(BSTree *tree);
+
+/*REVIEW - La he metido yo para el e3*/
+P_ele_cmp *bst_get_cmp(BSTree *tree);
+
 /**
  * @brief Public function that creates a new BSTree.
  *

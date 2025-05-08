@@ -37,10 +37,8 @@ int main(int argc, char *argv[]) {
   }
 
   /* A continuación, el programa leerá cada línea del fichero de entrada, insertando la cadena leída en una cola SQ.*/
-  while (fscanf(input_file, "%s", line) == 1) {
-    if (search_queue_push(queue, line) == OK) {
-      num_elems++;
-    }
+  if (read_tad_from_file(queue, argv[1], str2str, search_queue_push, search_queue_isEmpty) == ERROR) {
+    return 1;
   }
 
   /*Una vez leído el fichero de entrada, se vaciará la cola elemento a elemento imprimiendo cada línea en el fichero de salida.*/

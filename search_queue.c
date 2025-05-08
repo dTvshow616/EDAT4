@@ -1,5 +1,7 @@
 #include "search_queue.h"
 
+#include <stdlib.h>
+
 #include "bstree.h"
 
 struct _SearchQueue {
@@ -69,11 +71,7 @@ Bool search_queue_isEmpty(const SearchQueue *q) {
     return TRUE;
   }
 
-  if (tree_isEmpty(q->data)) {
-    return TRUE;
-  }
-
-  return FALSE;
+  return tree_isEmpty(q->data);
 }
 
 /**
@@ -132,7 +130,14 @@ void *search_queue_pop(SearchQueue *q) {
  * @return A pointer to the element in the front position, NULL in case of
  * error.
  * */
-void *search_queue_getFront(const SearchQueue *q) { /*TODO - */ }
+void *search_queue_getFront(const SearchQueue *q) {
+  /*REVIEW - */
+  if (!q) {
+    return NULL;
+  }
+
+  return tree_find_min(q->data);
+}
 
 /**
  * @brief This function is used to get a reference to the element in the back
@@ -144,6 +149,7 @@ void *search_queue_getFront(const SearchQueue *q) { /*TODO - */ }
  * @return A pointer to the element in the back position, NULL in case of error.
  * */
 void *search_queue_getBack(const SearchQueue *q) {
+  /*REVIEW - */
   if (!q) {
     return NULL;
   }
@@ -159,7 +165,14 @@ void *search_queue_getBack(const SearchQueue *q) {
  *
  * @return The SearchQueue size, 0 in case of error.
  */
-size_t search_queue_size(const SearchQueue *q) { /*TODO - */ }
+size_t search_queue_size(const SearchQueue *q) {
+  /*REVIEW - */
+  if (!q || (!q->data)) {
+    return 0;
+  }
+
+  return tree_size(q->data);
+}
 
 /**
  * @brief This function prints the SearchQueue content to an output stream.
@@ -170,4 +183,12 @@ size_t search_queue_size(const SearchQueue *q) { /*TODO - */ }
  * @return On success this function returns the number of characters printed. In
  * case of error it returns a negative value.
  *  */
-int search_queue_print(FILE *fp, const SearchQueue *q) { /*TODO - */ }
+int search_queue_print(FILE *fp, const SearchQueue *q) {
+  /*TODO - */
+  int chars_printed = 0;
+  if (!fp || !q) {
+    return -1;
+  }
+
+  return chars_printed;
+}
