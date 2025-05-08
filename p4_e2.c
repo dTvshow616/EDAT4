@@ -11,7 +11,6 @@ A la hora de extraer elementos siempre se hará según el elemento mínimo de di
 int main(int argc, char *argv[]) {
   /*REVIEW - */
   FILE *input_file, *output_file = NULL;
-  char line[1024];
   SearchQueue *queue = NULL;
   P_ele_print print_ele = string_print;
   P_ele_cmp cmp_ele = string_cmp;

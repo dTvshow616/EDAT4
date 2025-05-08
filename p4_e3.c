@@ -53,6 +53,7 @@ int main(int argc, char *argv[]) {
 
   fscanf(fich_notas, "%f", &num_notas);
 
+  /*Builds a tree from a previously allocated empty collection TaD*/
   if (read_tad_from_file(search_queue, argv[1], str2float, w_search_queue_push, w_search_queue_isEmpty) == ERROR) {
     return 1;
   }
@@ -82,11 +83,17 @@ int main(int argc, char *argv[]) {
   fprintf(stdout, "Highest grades:");
   for (i = 0; i < 3; i++) {
     top_grade = search_queue_getBack(search_queue);
+    if (!top_grade) {
+      search_queue_free(search_queue);
+      fclose(fich_notas);
+      return 1;
+    }
     print_ele(stdout, top_grade);
     free(top_grade);
     top_grade = NULL;
   }
   fprintf(stdout, "\n");
 
-  /*fclose(fich_notas);*/
+  search_queue_free(search_queue);
+  fclose(fich_notas);
 }

@@ -9,6 +9,8 @@ LIBS = -lm -pthread
 EJS = p4_e1 p4_e2 p4_e3
 OBJS = p4_e1.o p4_e2.o p4_e3.o
 OTROS = bstree.o vertex.o search_queue.o
+
+EJ2 = ./e2_out
 ################################################################################
 # $@ es el item que aparece a la izquierda de ':'
 # $< es el primer item en la lista de dependencias
@@ -79,9 +81,11 @@ run:
 
 	@echo ">>>>>>Running p4_e2"
 	@echo " "
-	./p4_e2 $(DATA)/data_string_10.txt $(OUT)/data_string_10.out
-	./p4_e2 $(DATA)/data_string_1K.txt $(OUT)/data_string_1K.out
-	./p4_e2 $(DATA)/data_string_2K.txt $(OUT)/data_string_2K.out
+	./p4_e2 $(DATA)/data_string_10.txt $(EJ2)/data_string_10.txt
+	@echo " "
+	./p4_e2 $(DATA)/data_string_1K.txt $(EJ2)data_string_1K.txt
+	@echo " "
+	./p4_e2 $(DATA)/data_string_2K.txt $(EJ2)data_string_2K.txt
 	@echo " "
 
 	@echo ">>>>>>Running p4_e3"
