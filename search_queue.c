@@ -202,3 +202,13 @@ int search_queue_print(FILE *fp, const SearchQueue *q) {
 
   return chars_printed;
 }
+
+/* REVIEW - La he hecho para el ej 3*/
+float search_queue_get_tree_nodes_sum(SearchQueue *q) {
+  if (!q) {
+    return 0;
+  }
+
+  /* El casting raro de *(int*) es pq info es un puntero void* */
+  return tree_sum_nodes(q->data);
+}

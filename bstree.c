@@ -493,6 +493,26 @@ Status tree_remove(BSTree *tree, const void *elem) {
   return OK;
 }
 
+/* REVIEW - La he hecho para el ej 3*/
+float tree_sum_nodes_recursive(BSTNode *node) {
+  if (!node) {
+    return 0;
+  }
+
+  /* El casting raro de *(int*) es pq info es un puntero void* */
+  return tree_sum_nodes_recursive(left(node)) + tree_sum_nodes_recursive(right(node)) + *((float *)(info(node)));
+}
+
+/* REVIEW - La he hecho para el ej 3*/
+float tree_sum_nodes(BSTree *tree) {
+  if (!tree) {
+    return 0;
+  }
+
+  /* El casting raro de *(int*) es pq info es un puntero void* */
+  return tree_sum_nodes_recursive(root(tree));
+}
+
 /*Me las he hecho pensando que hacían falta :/*/
 /*Bool bt_is_always_right(BSTree *tree) {
 

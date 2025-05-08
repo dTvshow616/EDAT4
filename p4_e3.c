@@ -27,50 +27,66 @@ Lowest grades: 2.90 3.30 3.90
 Highest grades: 9.90 9.20 8.50*/
 
 int main(int argc, char *argv[]) {
-  /*TODO - */
-  /*FILE *fich_notas = NULL;*/
+  /*REVIEW - Hay que ver cómo hacer que no lea el 20 del principio del fichero y que reconozca los floats*/
+  FILE *fich_notas = NULL;
   SearchQueue *search_queue;
   P_ele_print print_ele = float_print;
   P_ele_cmp cmp_ele = float_cmp;
   /*char line[1024];*/
   int i = 0;
   void *top_grade = NULL;
+  float media = 0;
+  float mediana = 0;
+  float num_notas = 0;
+  float suma = 0;
 
-  /*fich_notas = fopen(argv[1], "r");
+  fich_notas = fopen(argv[1], "r");
   if (!fich_notas) {
     return -1;
-  }*/
+  }
 
   search_queue = search_queue_new(print_ele, cmp_ele);
   if (!search_queue) {
-    /*fclose(fich_notas);*/
+    fclose(fich_notas);
     return -1;
   }
+
+  fscanf(fich_notas, "%f", &num_notas);
 
   if (read_tad_from_file(search_queue, argv[1], str2float, w_search_queue_push, w_search_queue_isEmpty) == ERROR) {
     return 1;
   }
-  printf("WHY DOESN'T THIS WORK FFS\n");
 
   /* Todas las notas ordenadas de menor a mayor (usando search_queue_print).*/
+  fprintf(stdout, "Ordered grades:");
   search_queue_print(stdout, search_queue);
+  fprintf(stdout, "\n");
 
   /* Media de las notas (con 2 cifras decimales).*/
+  suma = search_queue_get_tree_nodes_sum(search_queue);
+  media = suma / num_notas;
+
+  fprintf(stdout, "Mean: %.2f\n", media);
 
   /* Mediana de las notas (con 2 cifras decimales).*/
+  fprintf(stdout, "Median: %.2f\n", mediana);
 
   /* Tres notas más bajas (usando search_queue_pop, una a una).*/
+  fprintf(stdout, "Lowest grades:");
   for (i = 0; i < 3; i++) {
     print_ele(stdout, search_queue_pop(search_queue));
   }
+  fprintf(stdout, "\n");
 
   /* Tres notas más altas (usando search_queue_getBack y eliminando la nota del árbol para evitar repetición).*/
+  fprintf(stdout, "Highest grades:");
   for (i = 0; i < 3; i++) {
     top_grade = search_queue_getBack(search_queue);
     print_ele(stdout, top_grade);
     free(top_grade);
     top_grade = NULL;
   }
+  fprintf(stdout, "\n");
 
   /*fclose(fich_notas);*/
 }

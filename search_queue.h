@@ -11,6 +11,9 @@
  **/
 typedef struct _SearchQueue SearchQueue;
 
+/* REVIEW - La he hecho para el ej 3*/
+float search_queue_get_tree_nodes_sum(SearchQueue *q);
+
 /* START [_queue_new] */
 /**
  * @brief This function creates and initializes a SearchQueue.
