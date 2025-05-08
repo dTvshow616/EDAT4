@@ -65,7 +65,7 @@ clear:
 	rm -rf *.o 
 
 clean:
-	rm -f *.o
+	rm -f *.o $(EJS)
 
 run:
 	@echo ">>>>>>Running p4_e1"
