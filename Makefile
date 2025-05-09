@@ -95,17 +95,27 @@ run:
 
 runv:
 	@echo ">>>>>>Running p4_e1 with valgrind"
-	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1
-
+	@echo ""
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" normal
+	@echo ""
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" sorted
+	@echo ""
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" normal
+	@echo ""
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" sorted
 	@echo " "
 
 	@echo ">>>>>>Running p4_e2 with valgrind"
-	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e2
-
+	@echo " "
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e2 $(DATA)/data_string_10.txt $(EJ2)/data_string_10.txt
+	@echo " "
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e2 $(DATA)/data_string_1K.txt $(EJ2)/data_string_1K.txt
+	@echo " "
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e2 $(DATA)/data_string_2K.txt $(EJ2)/data_string_2K.txt
 	@echo " "
 
 	@echo ">>>>>>Running p4_e3 with valgrind"
+	@echo " "
 	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e3 grades.txt
-
 	@echo " "
 	

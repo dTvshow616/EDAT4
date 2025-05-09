@@ -1,0 +1,12 @@
+Nombre  | Compila | Hace todo? | Lo hace bien? | Valgrind bien?
+
+  1     |   Sí    |    Sí      |  Más o menos  |      Sí
+  2     |   No    |    --      |  -----------  |      --
+  3     |   Sí    |    --      |  -----------  |      --
+
+TERMINADOS:
+
+EN PROCESO:
+1
+2
+3

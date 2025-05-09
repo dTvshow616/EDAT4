@@ -10,7 +10,20 @@ struct _SearchQueue {
 
 Status search_queue_remove(SearchQueue *search_queue, void *ele) {
   /*REVIEW - La he hecho para el e3*/
+  if (!search_queue || !ele) {
+    return ERROR;
+  }
+
   return tree_remove(search_queue->data, ele);
+}
+
+float search_queue_get_median(SearchQueue *search_queue) {
+  /*REVIEW - */
+  if (!search_queue) {
+    return -1;
+  }
+
+  return tree_get_median(search_queue->data);
 }
 
 /* START [_queue_new] */

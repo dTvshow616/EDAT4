@@ -17,6 +17,9 @@ float search_queue_get_tree_nodes_sum(SearchQueue *q);
 /*REVIEW - La he hecho para el e3*/
 Status search_queue_remove(SearchQueue *search_queue, void *ele);
 
+/*REVIEW - La he hecho para el e3*/
+float search_queue_get_median(SearchQueue *search_queue);
+
 /* START [_queue_new] */
 /**
  * @brief This function creates and initializes a SearchQueue.

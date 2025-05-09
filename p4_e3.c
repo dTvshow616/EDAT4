@@ -37,11 +37,11 @@ int main(int argc, char *argv[]) {
   int i = 0;
   void *top_grade = NULL;
   float media = 0;
-  void *mediana = 0;
+  float mediana = 99999;
   float num_notas = 0;
   float suma = 0;
   float *notas = NULL;
-  void *ele = NULL;
+  /*void *ele = NULL;*/
 
   fich_notas = fopen(argv[1], "r");
   if (!fich_notas) {
@@ -92,20 +92,11 @@ int main(int argc, char *argv[]) {
   fprintf(stdout, "Mean: %.2f\n", media);
 
   /* Mediana de las notas (con 2 cifras decimales).*/
-  /*TODO - Falta hacer lo de la mediana*/
-  for (i = 0; i < (num_notas / 2) - 1; i++) {
-    printf("%i iteration\n", i);
-    ele = search_queue_pop(aux_queue);
-    if (!ele) {
-      search_queue_free(aux_queue);
-      search_queue_free(search_queue);
-      free(notas);
-    }
-  }
-  printf("Getting front\n");
-  mediana = search_queue_getFront(aux_queue);
+  /*TODO - No sé cómo dividir esto :( )*/
+  mediana = search_queue_get_median(aux_queue);
+
   fprintf(stdout, "Median: ");
-  float_print(stdout, mediana);
+  float_print(stdout, &mediana);
   fprintf(stdout, "\n");
 
   /* Tres notas más bajas (usando search_queue_pop, una a una).*/

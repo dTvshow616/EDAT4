@@ -28,8 +28,55 @@ struct _BSTree {
 };
 /* END [_BSTree] */
 
+float tree_get_median(BSTree *tree) {
+  float num_notas = tree_size(tree);
+  int punto_stop, i = 0;
+  void *ele1 = NULL;
+  void *ele2 = NULL;
+  /*El cálculo de la mediana depende de si el número total de datos es par o impar:
+  Si el número total de datos es impar, la mediana será el valor que está justo en el medio de los datos.
+  Si el número total de datos es par, la mediana será la media de los dos datos que están en el centro*/
+  if ((int)num_notas % 2 == 0) {
+    punto_stop = (num_notas / 2) - 1;
+    for (i = 0; i < punto_stop; i++) {
+      tree_pop(tree);
+    }
+    ele1 = tree_pop(tree);
+    printf("ele1 is %f\n", *((float *)(ele1)));
+    ele2 = tree_pop(tree);
+    printf("ele2 is %f\n", *((float *)(ele2)));
+    printf("The median is %f\n", ((*((float *)(ele1)) + (*((float *)(ele2)))) / 2));
+    return ((*((float *)(ele1)) + (*((float *)(ele2)))) / 2);
+  } else {
+    punto_stop = (int)num_notas / 2;
+    for (i = 0; i < punto_stop; i++) {
+      tree_pop(tree);
+    }
+    ele1 = tree_pop(tree);
+    printf("ele1 is %f\n", *((float *)(ele1)));
+    printf("The median is %f\n", *((float *)(ele1)));
+    return *((float *)(ele1));
+  }
+
+  return -1;
+}
+
+void *tree_pop(BSTree *tree) {
+  void *ele = NULL;
+  ele = tree_find_min(tree);
+  if (!ele) {
+    return NULL;
+  }
+
+  if (tree_remove(tree, ele) == ERROR) {
+    return NULL;
+  }
+
+  return ele;
+}
+
 P_ele_print *bst_get_print(BSTree *tree) {
-  /*REVIEW - La he metido yo para el e3*/
+  /*ANCHOR - La he metido yo para el e3*/
   if (!tree) {
     return NULL;
   }
@@ -38,7 +85,7 @@ P_ele_print *bst_get_print(BSTree *tree) {
 }
 
 P_ele_cmp *bst_get_cmp(BSTree *tree) {
-  /*REVIEW - La he metido yo para el e3*/
+  /*ANCHOR - La he metido yo para el e3*/
   if (!tree) {
     return NULL;
   }
@@ -234,7 +281,7 @@ int tree_postOrder(FILE *f, const BSTree *tree) {
 
 /**** TODO: find_min, find_max, insert, contains, remove ****/
 BSTNode *_bst_find_min_rec(BSTNode *pn) {
-  /*REVIEW - p4_e1a*/
+  /*ANCHOR - p4_e1a*/
   if (!pn || !left(pn)) {
     return pn;
   }
@@ -243,7 +290,7 @@ BSTNode *_bst_find_min_rec(BSTNode *pn) {
 }
 
 BSTNode *_bst_find_max_rec(BSTNode *pn) {
-  /*REVIEW - p4_e1a*/
+  /*ANCHOR - p4_e1a*/
   if (!pn || !right(pn)) {
     return pn;
   }
@@ -252,7 +299,7 @@ BSTNode *_bst_find_max_rec(BSTNode *pn) {
 }
 
 Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
-  /*REVIEW - p4_e1a*/
+  /*ANCHOR - p4_e1a*/
   int cmp;
   if (!pn) {
     return FALSE;
@@ -290,7 +337,7 @@ Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
 b   c
     d e*/
 BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
-  /*REVIEW - p4_e1a*/
+  /*ANCHOR - p4_e1a*/
   BSTNode *new_node = NULL;
   int cmp;
 
@@ -333,7 +380,7 @@ BSTNode *_bst_insert_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
   posición del árbol, ya sea el nodo original, uno de sus hijos, o NULL si la posición queda vacía.
   A continuación,*/
 BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
-  /*REVIEW - p4_e1b*/
+  /*ANCHOR - p4_e1b*/
   int cmp;
   BSTNode *ret_node, *aux_node;
   if (!pn) {
@@ -382,7 +429,7 @@ BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
  * @brief Public function that finds the minimum element in a Binary Search Tree.
  */
 void *tree_find_min(BSTree *tree) {
-  /*REVIEW - p4_e1a*/
+  /*ANCHOR - p4_e1a*/
   BSTNode *node;
   if (!tree || !root(tree)) {
     return NULL;
@@ -401,7 +448,7 @@ void *tree_find_min(BSTree *tree) {
  * @brief Public function that finds the maximum element in a Binary Search Tree.
  */
 void *tree_find_max(BSTree *tree) {
-  /*REVIEW - p4_e1a*/
+  /*ANCHOR - p4_e1a*/
   BSTNode *node;
   if (!tree || !root(tree)) {
     return NULL;
@@ -425,7 +472,7 @@ void *tree_find_max(BSTree *tree) {
  * @return Bool value TRUE if the element was found, FALSE otherwise.
  */
 Bool tree_contains(BSTree *tree, const void *elem) {
-  /*REVIEW - p4_e1a*/
+  /*ANCHOR - p4_e1a*/
   if (!tree || !elem || !cmp(tree)) {
     return FALSE;
   }
@@ -450,7 +497,7 @@ Bool tree_contains(BSTree *tree, const void *elem) {
  * already in the BST, Status value ERROR otherwise.
  */
 Status tree_insert(BSTree *tree, const void *elem) {
-  /*REVIEW - p4_e1a*/
+  /*ANCHOR - p4_e1a*/
   BSTNode *new_root;
 
   if (!tree || !elem) {
@@ -483,7 +530,7 @@ Status tree_insert(BSTree *tree, const void *elem) {
  * in the BST, Status value ERROR otherwise.
  */
 Status tree_remove(BSTree *tree, const void *elem) {
-  /*REVIEW - p4_e1b*/
+  /*ANCHOR - p4_e1b*/
   if (!tree || (tree_isEmpty(tree) == TRUE)) {
     return OK;
   }
@@ -492,7 +539,7 @@ Status tree_remove(BSTree *tree, const void *elem) {
   return OK;
 }
 
-/* REVIEW - La he hecho para el ej 3*/
+/* ANCHOR - La he hecho para el ej 3*/
 float tree_sum_nodes_recursive(BSTNode *node) {
   if (!node) {
     return 0;
@@ -502,7 +549,7 @@ float tree_sum_nodes_recursive(BSTNode *node) {
   return tree_sum_nodes_recursive(left(node)) + tree_sum_nodes_recursive(right(node)) + *((float *)(info(node)));
 }
 
-/* REVIEW - La he hecho para el ej 3*/
+/* ANCHOR - La he hecho para el ej 3*/
 float tree_sum_nodes(BSTree *tree) {
   if (!tree) {
     return 0;

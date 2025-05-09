@@ -17,6 +17,11 @@ P_ele_cmp *bst_get_cmp(BSTree *tree);
 /* REVIEW - La he hecho para el ej 3*/
 float tree_sum_nodes(BSTree *tree);
 
+/* REVIEW - La he hecho para el ej 3*/
+float tree_get_median(BSTree *tree);
+
+/* REVIEW - La he hecho para el ej 3*/
+void *tree_pop(BSTree *tree);
 /**
  * @brief Public function that creates a new BSTree.
  *
