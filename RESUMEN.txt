@@ -2,11 +2,13 @@ Nombre  | Compila | Hace todo?                       | Lo hace bien? | Valgrind 
 ------------------------------------------------------------------------------------------
   1     |   Sí    |    Sí                            |  Tarda mucho  |  Sí
   2     |   No    |    --                            |  -----------  |  --
-  3     |   Sí    |    Falta search_queue_print      |  Casi todo    |  Por ahora sí
+  3     |   Sí    |    Sí                            |  Sí           |  Sí
 
 TERMINADOS:
+3
+
+SE PODRÍA MEJORAR:
+1
 
 EN PROCESO:
-1
 2
-3

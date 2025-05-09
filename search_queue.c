@@ -212,13 +212,11 @@ size_t search_queue_size(const SearchQueue *q) {
  * case of error it returns a negative value.
  *  */
 int search_queue_print(FILE *fp, const SearchQueue *q) {
-  /*TODO - */
-  int chars_printed = 0;
+  /*REVIEW - */
   if (!fp || !q) {
     return -1;
   }
-
-  return chars_printed;
+  return tree_inOrder(fp, q->data);
 }
 
 /* REVIEW - La he hecho para el ej 3*/

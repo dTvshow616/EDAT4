@@ -83,7 +83,6 @@ int main(int argc, char *argv[]) {
   /* Todas las notas ordenadas de menor a mayor (usando search_queue_print).*/
   fprintf(stdout, "Ordered grades: ");
   search_queue_print(stdout, search_queue);
-  fprintf(stdout, "\n");
 
   /* Media de las notas (con 2 cifras decimales).*/
   suma = search_queue_get_tree_nodes_sum(search_queue);
