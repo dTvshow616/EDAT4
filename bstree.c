@@ -258,10 +258,9 @@ Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
     return FALSE;
   }
 
-  cmp = cmp_elem(info(pn), elem);
+  cmp = cmp_elem(elem, info(pn));
 
   if (cmp == 0) {
-    printf("-----FOUND IT!!\n");
     return TRUE;
   } else if (cmp > 0) {
     /*El elemento es mayor que el buscado*/
@@ -343,11 +342,11 @@ BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
 
   cmp = cmp_elem(elem, info(pn));
   /*Comparación de elem con la información del nodo actual*/
-  if (cmp < 0) {
+  if (cmp > 0) {
     /*Buscar en el subárbol izquierdo*/
     left(pn) = _bst_remove_rec(left(pn), elem, cmp_elem);
 
-  } else if (cmp > 0) {
+  } else if (cmp < 0) {
     /*Buscar en el subárbol derecho*/
     right(pn) = _bst_remove_rec(right(pn), elem, cmp_elem);
 

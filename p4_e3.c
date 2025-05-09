@@ -28,7 +28,7 @@ Lowest grades: 2.90 3.30 3.90
 Highest grades: 9.90 9.20 8.50*/
 
 int main(int argc, char *argv[]) {
-  /*REVIEW - Hay que ver cómo hacer que no lea el 20 del principio del fichero y que reconozca los floats*/
+  /*REVIEW - Hay que pasarle valgrind*/
   FILE *fich_notas = NULL;
   SearchQueue *search_queue;
   SearchQueue *aux_queue;
@@ -37,10 +37,11 @@ int main(int argc, char *argv[]) {
   int i = 0;
   void *top_grade = NULL;
   float media = 0;
-  /*void *mediana = 0;*/
+  void *mediana = 0;
   float num_notas = 0;
   float suma = 0;
   float *notas = NULL;
+  void *ele = NULL;
 
   fich_notas = fopen(argv[1], "r");
   if (!fich_notas) {
@@ -92,9 +93,20 @@ int main(int argc, char *argv[]) {
 
   /* Mediana de las notas (con 2 cifras decimales).*/
   /*TODO - Falta hacer lo de la mediana*/
-  /*fprintf(stdout, "Median: ");
+  for (i = 0; i < (num_notas / 2) - 1; i++) {
+    printf("%i iteration\n", i);
+    ele = search_queue_pop(aux_queue);
+    if (!ele) {
+      search_queue_free(aux_queue);
+      search_queue_free(search_queue);
+      free(notas);
+    }
+  }
+  printf("Getting front\n");
+  mediana = search_queue_getFront(aux_queue);
+  fprintf(stdout, "Median: ");
   float_print(stdout, mediana);
-  fprintf(stdout, "\n");*/
+  fprintf(stdout, "\n");
 
   /* Tres notas más bajas (usando search_queue_pop, una a una).*/
   fprintf(stdout, "Lowest grades: ");
@@ -111,6 +123,7 @@ int main(int argc, char *argv[]) {
     if (!top_grade) {
       search_queue_free(search_queue);
       search_queue_free(aux_queue);
+      free(notas);
       return 1;
     }
 
@@ -122,4 +135,5 @@ int main(int argc, char *argv[]) {
 
   search_queue_free(aux_queue);
   search_queue_free(search_queue);
+  free(notas);
 }
