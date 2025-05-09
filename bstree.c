@@ -29,6 +29,7 @@ struct _BSTree {
 /* END [_BSTree] */
 
 float tree_get_median(BSTree *tree) {
+  /*ANCHOR - La he hecho para el e3*/
   float num_notas = tree_size(tree);
   int punto_stop, i = 0;
   void *ele1 = NULL;
@@ -37,15 +38,15 @@ float tree_get_median(BSTree *tree) {
   Si el número total de datos es impar, la mediana será el valor que está justo en el medio de los datos.
   Si el número total de datos es par, la mediana será la media de los dos datos que están en el centro*/
   if ((int)num_notas % 2 == 0) {
-    punto_stop = (num_notas / 2) - 1;
+    punto_stop = (num_notas / 2) - 2;
     for (i = 0; i < punto_stop; i++) {
       tree_pop(tree);
     }
     ele1 = tree_pop(tree);
-    printf("ele1 is %f\n", *((float *)(ele1)));
+    /*printf("ele1 is %f\n", *((float *)(ele1)));*/
     ele2 = tree_pop(tree);
-    printf("ele2 is %f\n", *((float *)(ele2)));
-    printf("The median is %f\n", ((*((float *)(ele1)) + (*((float *)(ele2)))) / 2));
+    /*printf("ele2 is %f\n", *((float *)(ele2)));
+    printf("The median is %f\n", ((*((float *)(ele1)) + (*((float *)(ele2)))) / 2));*/
     return ((*((float *)(ele1)) + (*((float *)(ele2)))) / 2);
   } else {
     punto_stop = (int)num_notas / 2;
@@ -53,8 +54,8 @@ float tree_get_median(BSTree *tree) {
       tree_pop(tree);
     }
     ele1 = tree_pop(tree);
-    printf("ele1 is %f\n", *((float *)(ele1)));
-    printf("The median is %f\n", *((float *)(ele1)));
+    /*printf("ele1 is %f\n", *((float *)(ele1)));
+    printf("The median is %f\n", *((float *)(ele1)));*/
     return *((float *)(ele1));
   }
 
@@ -62,6 +63,7 @@ float tree_get_median(BSTree *tree) {
 }
 
 void *tree_pop(BSTree *tree) {
+  /*ANCHOR - La he hecho para el e3*/
   void *ele = NULL;
   ele = tree_find_min(tree);
   if (!ele) {
@@ -71,6 +73,8 @@ void *tree_pop(BSTree *tree) {
   if (tree_remove(tree, ele) == ERROR) {
     return NULL;
   }
+
+  /*tree_inOrder(stdout, tree);*/
 
   return ele;
 }
@@ -182,6 +186,7 @@ int _bst_inOrder_rec(BSTNode *pn, FILE *pf, P_ele_print print_ele) {
 
   count += _bst_inOrder_rec(pn->left, pf, print_ele);
   count += print_ele(pf, pn->info);
+  /*printf(" ");*/ /*NOTE - Esta linea la he metido para poder leer mejor la salida*/
   count += _bst_inOrder_rec(pn->right, pf, print_ele);
 
   return count;
@@ -281,7 +286,7 @@ int tree_postOrder(FILE *f, const BSTree *tree) {
 
 /**** TODO: find_min, find_max, insert, contains, remove ****/
 BSTNode *_bst_find_min_rec(BSTNode *pn) {
-  /*ANCHOR - p4_e1a*/
+  /*REVIEW - p4_e1a*/
   if (!pn || !left(pn)) {
     return pn;
   }
@@ -290,7 +295,7 @@ BSTNode *_bst_find_min_rec(BSTNode *pn) {
 }
 
 BSTNode *_bst_find_max_rec(BSTNode *pn) {
-  /*ANCHOR - p4_e1a*/
+  /*REVIEW - p4_e1a*/
   if (!pn || !right(pn)) {
     return pn;
   }
@@ -299,7 +304,7 @@ BSTNode *_bst_find_max_rec(BSTNode *pn) {
 }
 
 Bool _bst_contains_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
-  /*ANCHOR - p4_e1a*/
+  /*REVIEW - p4_e1a*/
   int cmp;
   if (!pn) {
     return FALSE;
@@ -387,7 +392,7 @@ BSTNode *_bst_remove_rec(BSTNode *pn, const void *elem, P_ele_cmp cmp_elem) {
     return NULL;
   }
 
-  cmp = cmp_elem(elem, info(pn));
+  cmp = cmp_elem(info(pn), elem);
   /*Comparación de elem con la información del nodo actual*/
   if (cmp > 0) {
     /*Buscar en el subárbol izquierdo*/
@@ -472,7 +477,7 @@ void *tree_find_max(BSTree *tree) {
  * @return Bool value TRUE if the element was found, FALSE otherwise.
  */
 Bool tree_contains(BSTree *tree, const void *elem) {
-  /*ANCHOR - p4_e1a*/
+  /*REVIEW - p4_e1a*/
   if (!tree || !elem || !cmp(tree)) {
     return FALSE;
   }
@@ -530,12 +535,13 @@ Status tree_insert(BSTree *tree, const void *elem) {
  * in the BST, Status value ERROR otherwise.
  */
 Status tree_remove(BSTree *tree, const void *elem) {
-  /*ANCHOR - p4_e1b*/
-  if (!tree || (tree_isEmpty(tree) == TRUE)) {
-    return OK;
+  /*ANCHOR - FUNCIONA!! :)*/
+  if (!tree || tree_isEmpty(tree) == TRUE) {
+    return ERROR;
   }
 
-  _bst_remove_rec(root(tree), elem, cmp(tree));
+  root(tree) = _bst_remove_rec(root(tree), elem, cmp(tree));
+
   return OK;
 }
 
