@@ -24,11 +24,12 @@ haciendo que se tarde más en ordenarlo, ya que hay que ver todos los valores, y
 -------------------------------- Reflexiones sobre el TAD SQ --------------------------------
 - ¿Qué diferencias y similitudes hay entre el TAD SQ y el TAD Cola de la práctica anterior?
 
-/*TODO - */
+Es como un Queue normal con la única diferencia de que se puede navegar de diversas maneras por él al incluir
+también las capacidades de los árboles.
 
 - ¿Qué coste (aproximado) tiene la operación de extraer un elemento en el TAD SQ?
 ¿Sería posible hacer que esta operación fuera 𝒪(1)?
 
 Como está basada en un Árbol Binario de Búsqueda (ABdB) tiene el mismo coste que el de extraer un elemento de dicho 
 tipo de Árbol, así que es de O(log(n)) de la búsqueda (ya que una vez encontrado lo eliminamos y ya). Creemos que 
-sería posible si los árboles tuviesen sólo el root, sin hijos, a
+sería posible si los árboles tuviesen sólo el root, sin hijos, aunque probablemente haya un método que no sea inútil.
