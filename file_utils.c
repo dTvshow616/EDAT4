@@ -116,7 +116,7 @@ void float_free(void *a) { free((float *)a); }
 
 int float_print(FILE *pf, const void *a) {
   if (!pf || !a) return -1;
-  return fprintf(pf, "%f", *(float *)a);
+  return fprintf(pf, "%.2f", *(float *)a);
 }
 
 //  String

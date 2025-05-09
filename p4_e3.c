@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "bstree.h"
 #include "file_utils.h"
 #include "search_queue.h"
 
@@ -30,15 +31,16 @@ int main(int argc, char *argv[]) {
   /*REVIEW - Hay que ver cómo hacer que no lea el 20 del principio del fichero y que reconozca los floats*/
   FILE *fich_notas = NULL;
   SearchQueue *search_queue;
+  SearchQueue *aux_queue;
   P_ele_print print_ele = float_print;
   P_ele_cmp cmp_ele = float_cmp;
-  /*char line[1024];*/
   int i = 0;
   void *top_grade = NULL;
   float media = 0;
-  float mediana = 0;
+  /*void *mediana = 0;*/
   float num_notas = 0;
   float suma = 0;
+  float *notas = NULL;
 
   fich_notas = fopen(argv[1], "r");
   if (!fich_notas) {
@@ -51,15 +53,34 @@ int main(int argc, char *argv[]) {
     return -1;
   }
 
-  fscanf(fich_notas, "%f", &num_notas);
-
-  /*Builds a tree from a previously allocated empty collection TaD*/
-  if (read_tad_from_file(search_queue, argv[1], str2float, w_search_queue_push, w_search_queue_isEmpty) == ERROR) {
-    return 1;
+  aux_queue = search_queue_new(print_ele, cmp_ele);
+  if (!aux_queue) {
+    search_queue_free(search_queue);
+    fclose(fich_notas);
+    return -1;
   }
 
+  fscanf(fich_notas, "%f", &num_notas);
+
+  notas = (float *)calloc(num_notas, sizeof(float));
+  if (!search_queue) {
+    search_queue_free(search_queue);
+    search_queue_free(aux_queue);
+    fclose(fich_notas);
+    return -1;
+  }
+
+  /*Builds a tree from a previously allocated empty collection TaD*/
+  for (i = 0; i < num_notas; i++) {
+    fscanf(fich_notas, "%f", &notas[i]);
+    search_queue_push(search_queue, &notas[i]);
+    search_queue_push(aux_queue, &notas[i]);
+  }
+
+  fclose(fich_notas);
+
   /* Todas las notas ordenadas de menor a mayor (usando search_queue_print).*/
-  fprintf(stdout, "Ordered grades:");
+  fprintf(stdout, "Ordered grades: ");
   search_queue_print(stdout, search_queue);
   fprintf(stdout, "\n");
 
@@ -70,30 +91,35 @@ int main(int argc, char *argv[]) {
   fprintf(stdout, "Mean: %.2f\n", media);
 
   /* Mediana de las notas (con 2 cifras decimales).*/
-  fprintf(stdout, "Median: %.2f\n", mediana);
+  /*TODO - Falta hacer lo de la mediana*/
+  /*fprintf(stdout, "Median: ");
+  float_print(stdout, mediana);
+  fprintf(stdout, "\n");*/
 
   /* Tres notas más bajas (usando search_queue_pop, una a una).*/
-  fprintf(stdout, "Lowest grades:");
+  fprintf(stdout, "Lowest grades: ");
   for (i = 0; i < 3; i++) {
     print_ele(stdout, search_queue_pop(search_queue));
+    fprintf(stdout, " ");
   }
   fprintf(stdout, "\n");
 
   /* Tres notas más altas (usando search_queue_getBack y eliminando la nota del árbol para evitar repetición).*/
-  fprintf(stdout, "Highest grades:");
+  fprintf(stdout, "Highest grades: ");
   for (i = 0; i < 3; i++) {
     top_grade = search_queue_getBack(search_queue);
     if (!top_grade) {
       search_queue_free(search_queue);
-      fclose(fich_notas);
+      search_queue_free(aux_queue);
       return 1;
     }
+
     print_ele(stdout, top_grade);
-    free(top_grade);
-    top_grade = NULL;
+    fprintf(stdout, " ");
+    search_queue_remove(search_queue, top_grade);
   }
   fprintf(stdout, "\n");
 
+  search_queue_free(aux_queue);
   search_queue_free(search_queue);
-  fclose(fich_notas);
 }
