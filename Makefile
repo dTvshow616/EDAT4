@@ -1,6 +1,6 @@
 ################################################################################
 CC=gcc
-CFLAGS=-Wall -ggdb -Werror -Wpedantic
+CFLAGS=-Wall -ggdb -Werror -Wpedantic -ansi
 IFLAGS=-I./
 LDFLAGS=-L./
 LDLIBS=
@@ -19,7 +19,7 @@ EJ2 = ./e2_out
 include makefile_ext
 ################################################################################
 
-all: $(EJS) $(OTROS) $(OBJS)
+all: $(EJS) $(OTROS) $(OBJS) 
 
 # ------------------------------- Ejercicio 1 -------------------------------- #
 

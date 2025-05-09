@@ -1,6 +1,0 @@
-apple
-banana
-grape
-kiwi
-orange
-zebra
