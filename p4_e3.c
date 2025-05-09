@@ -28,7 +28,7 @@ Lowest grades: 2.90 3.30 3.90
 Highest grades: 9.90 9.20 8.50*/
 
 int main(int argc, char *argv[]) {
-  /*REVIEW - Hay que pasarle valgrind*/
+  /*ANCHOR - Hecho :)*/
   FILE *fich_notas = NULL;
   SearchQueue *search_queue;
   SearchQueue *aux_queue;

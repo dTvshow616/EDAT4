@@ -212,7 +212,7 @@ size_t search_queue_size(const SearchQueue *q) {
  * case of error it returns a negative value.
  *  */
 int search_queue_print(FILE *fp, const SearchQueue *q) {
-  /*REVIEW - */
+  /*ANCHOR - */
   if (!fp || !q) {
     return -1;
   }

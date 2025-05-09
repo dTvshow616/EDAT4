@@ -57,7 +57,7 @@ void *str2chr(const char *str);
  *
  * If error return NULL and print message in stderror
  */
-void *str2float(const char *str); /*NOTE - Esta no estaba metida???*/
+/*void *str2float(const char *str);*/ /*NOTE - Esta no funciona*/
 
 //-----------------------------------------------------------
 //------- file functions utilities

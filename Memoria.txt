@@ -29,4 +29,6 @@ haciendo que se tarde más en ordenarlo, ya que hay que ver todos los valores, y
 - ¿Qué coste (aproximado) tiene la operación de extraer un elemento en el TAD SQ?
 ¿Sería posible hacer que esta operación fuera 𝒪(1)?
 
-/*TODO - */
+Como está basada en un Árbol Binario de Búsqueda (ABdB) tiene el mismo coste que el de extraer un elemento de dicho 
+tipo de Árbol, así que es de O(log(n)) de la búsqueda (ya que una vez encontrado lo eliminamos y ya). Creemos que 
+sería posible si los árboles tuviesen sólo el root, sin hijos, a
