@@ -3,23 +3,19 @@
 
 #include "types.h"
 
-/*NOTE - Hay que mover las estructuras*/
-struct _BSTree {
-  BSTNode *root;
-  P_ele_print print_ele;
-  P_ele_cmp cmp_ele;
-};
-
-typedef struct _BSTNode {
-  void *info;
-  struct BSTNode *left;
-  struct BSTNode *right;
-} BSTNode;
-
 /**
  * BSTree type definition: a binary search of arbitrary elements.
  */
 typedef struct _BSTree BSTree;
+
+/*REVIEW - La he metido yo para el e3*/
+P_ele_print *bst_get_print(BSTree *tree);
+
+/*REVIEW - La he metido yo para el e3*/
+P_ele_cmp *bst_get_cmp(BSTree *tree);
+
+/* REVIEW - La he hecho para el ej 3*/
+float tree_sum_nodes(BSTree *tree);
 
 /**
  * @brief Public function that creates a new BSTree.
@@ -190,16 +186,5 @@ Status tree_insert(BSTree *tree, const void *elem);
  * in the BST, Status value ERROR otherwise.
  */
 Status tree_remove(BSTree *tree, const void *elem);
-
-/*tree_find_min: devuelve el elemento más pequeño almacenado en el árbol.
- tree_find_max: devuelve el elemento más grande almacenado en el árbol.
- tree_contains: comprueba si un elemento existe en el árbol.
- tree_insert: inserta un nuevo elemento en el árbol (si el elemento ya se encuentra
-en el árbol no se debe insertar, pero la función devolverá OK).*/
-
-void *tree_find_min(); /*TODO - */
-void *tree_find_max(); /*TODO - */
-Bool tree_contains();  /*TODO - */
-Status tree_insert();  /*TODO - */
 
 #endif

@@ -1,111 +1,111 @@
-########################################################
+################################################################################
 CC=gcc
 CFLAGS=-Wall -ggdb -Werror -Wpedantic
 IFLAGS=-I./
 LDFLAGS=-L./
-LDLIBS=-lstack -lqueue
+LDLIBS=
 # -lm enlaza la biblioteca matematica, -pthread enlaza la biblioteca de hilos
 LIBS = -lm -pthread
-EJS = p3_e1.o p3_e1 p3_e2a.o p3_e2a p3_e2b.o p3_e2b p3_e3.o p3_e3
-OTROS = queue.o list.o delivery.o
-######################################################################
+EJS = p4_e1 p4_e2 p4_e3
+OBJS = p4_e1.o p4_e2.o p4_e3.o
+OTROS = bstree.o vertex.o search_queue.o
+
+EJ2 = ./e2_out
+################################################################################
 # $@ es el item que aparece a la izquierda de ':'
 # $< es el primer item en la lista de dependencias
 # $^ son todos los archivos que se encuentran a la derecha de ':' (dependencias)
-########################################################################
-all: $(EJS) $(OTROS)
+################################################################################
+include makefile_ext
+################################################################################
 
-# Ejercicio 1
-p3_e1: p3_e1.o delivery.o vertex.o list.o libqueue.a
+all: $(EJS) $(OTROS) $(OBJS)
+
+# ------------------------------- Ejercicio 1 -------------------------------- #
+
+p4_e1: p4_e1.o bstree.o vertex.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) $(LIBS)
 
-p3_e1.o: p3_e1.c delivery.h vertex.h list.h queue.h
+p4_e1.o: p4_e1.c bstree.h vertex.h types.h
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
-# Ejercicio 2
-p3_e2a: p3_e2a.o delivery.o vertex.o list.o queue.o
+# ------------------------------- Ejercicio 2 -------------------------------- #
+
+p4_e2: p4_e2.o file_utils.o search_queue.o bstree.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-p3_e2a.o: p3_e2a.c delivery.h vertex.h list.h queue.h
+p4_e2.o: p4_e2.c file_utils.h search_queue.h bstree.h 
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
-p3_e2b: p3_e2b.o graph.o vertex.o queue.o stack.o
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
+# ------------------------------- Ejercicio 3 -------------------------------- #
 
-p3_e2b.o: p3_e2b.c graph.h vertex.h queue.h stack.h
-	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
-
-# Ejercicio 3
-p3_e3: p3_e3.o list.o file_utils.o
+p4_e3: p4_e3.o file_utils.o search_queue.o bstree.o
 	$(CC) -o $@ $^ $(LDFLAGS) $(LDLIBS) $(LIBS)
 
-p3_e3.o: p3_e3.c list.h file_utils.h
+p4_e3.o: p4_e3.c file_utils.h search_queue.h bstree.h
 	$(CC) -c -o $@ $< $(CFLAGS) $(IFLAGS)
 
-# Archivos necesarios para los ejercicios 
-delivery.o: delivery.c delivery.h queue.h types.h
-	$(CC) $(CFLAGS) -c delivery.c
+# ----------------- Archivos necesarios para los ejercicios ------------------ #
 
 file_utils.o: file_utils.c file_utils.h
 	$(CC) $(CFLAGS) -c file_utils.c
 
-graph.o: graph.c graph.h vertex.h queue.h
-	$(CC) $(CFLAGS) -c graph.c
-
-list.o: list.c list.h
-	$(CC) $(CFLAGS) -c list.c
-
-queue.o: queue.c queue.h
-	$(CC) $(CFLAGS) -c queue.c
-
-stack.o: stack.c stack.h
-	$(CC) $(CFLAGS) -c stack.c
-
 vertex.o: vertex.c vertex.h
 	$(CC) $(CFLAGS) -c vertex.c
+
+bstree.o: bstree.c bstree.h
+	$(CC) $(CFLAGS) -c bstree.c
+
+search_queue.o: search_queue.c search_queue.h bstree.h types.h
+	$(CC) $(CFLAGS) -c search_queue.c
+
+# ---------------------------- Comandos del make ----------------------------- #
 
 clear:
 	rm -rf *.o 
 
 clean:
-	rm -f *.o
+	rm -f *.o $(EJS)
 
 run:
-	@echo ">>>>>>Running p3_e1"
-	./p3_e1 requests.txt
-	
+	@echo ">>>>>>Running p4_e1"
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" normal
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:88997 tag:Golf_de_Ibiza" sorted
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" normal
+	@echo ""
+	./p4_e1 $(DATA)/data_vertex_50K.txt "id:889907 tag:Golf_de_Ibiza" sorted
 	@echo " "
 
-	@echo ">>>>>>Running p3_e2a"
-	./p3_e2a requests.txt
-
+	@echo ">>>>>>Running p4_e2"
+	@echo " "
+	./p4_e2 $(DATA)/data_string_10.txt $(EJ2)/data_string_10.txt
+	@echo " "
+	./p4_e2 $(DATA)/data_string_1K.txt $(EJ2)/data_string_1K.txt
+	@echo " "
+	./p4_e2 $(DATA)/data_string_2K.txt $(EJ2)/data_string_2K.txt
 	@echo " "
 
-	@echo ">>>>>>Running p3_e2b"
-	./p3_e2b city_graph.txt 100 700
-
+	@echo ">>>>>>Running p4_e3"
 	@echo " "
-
-	@echo ">>>>>>Running p3_e3"
-	./p3_e3 grades.txt 1
+	./p4_e3 grades.txt
+	@echo " "
 
 runv:
-	@echo ">>>>>>Running p3_e1 with valgrind"
-	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p3_e1 requests.txt
+	@echo ">>>>>>Running p4_e1 with valgrind"
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e1
 
 	@echo " "
 
-	@echo ">>>>>>Running p3_e2a with valgrind"
-	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p3_e2a requests.txt
+	@echo ">>>>>>Running p4_e2 with valgrind"
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e2
 
 	@echo " "
 
-	@echo ">>>>>>Running p3_e2b with valgrind"
-	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p3_e2b city_graph.txt 100 700
+	@echo ">>>>>>Running p4_e3 with valgrind"
+	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p4_e3 grades.txt
 
 	@echo " "
-
-
-	@echo ">>>>>>Running p3_e3 with valgrind"
-	valgrind -s --leak-check=full --track-origins=yes --show-leak-kinds=all ./p3_e3 grades.txt 1
 	

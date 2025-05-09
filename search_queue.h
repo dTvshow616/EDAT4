@@ -11,6 +11,9 @@
  **/
 typedef struct _SearchQueue SearchQueue;
 
+/* REVIEW - La he hecho para el ej 3*/
+float search_queue_get_tree_nodes_sum(SearchQueue *q);
+
 /* START [_queue_new] */
 /**
  * @brief This function creates and initializes a SearchQueue.
@@ -46,6 +49,8 @@ void search_queue_free(SearchQueue *q);
  */
 Bool search_queue_isEmpty(const SearchQueue *q);
 
+Bool w_search_queue_isEmpty(const void *tad);
+
 /**
  * @brief This function is used to insert an element at the back position of a
  * SearchQueue. A reference to the element is added.
@@ -56,6 +61,8 @@ Bool search_queue_isEmpty(const SearchQueue *q);
  * @return OK on success, ERROR otherwise.
  *  */
 Status search_queue_push(SearchQueue *q, void *ele);
+
+Status w_search_queue_push(void *tad, const void *ele);
 
 /**
  * @brief This function is used to extract an element from the front position of

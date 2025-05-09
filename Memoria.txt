@@ -1,0 +1,32 @@
+Para probar la implementación de este TAD se proporciona el programa principal p4_e1.c que
+debe funcionar sin fugas de memoria, y producir la salida esperada que se incluye en el fichero
+run_e1.out (puede haber discrepancias en los mensajes de tiempos). Se proporcionan
+además más ejemplos de ficheros de datos con los que probar este programa.
+Es necesario estudiar el código proporcionado para entender qué operaciones se realizan y qué
+primitivas del TAD se están utilizando, prestando especial atención a la opción que ordena o no
+los datos previamente a través de la función qsort.
+
+------------------------------- Reflexiones sobre el TAD BST -------------------------------
+Al ejecutar el programa p4_e1.c se puede comprobar que los tiempos de creación y búsqueda
+varían mucho según si el programa se ejecuta en modo normal o en modo ordenado.
+
+- ¿Por qué es así?
+
+Porque crear un árbol de manera ordenada consume mucho más tiempo ya que tiene que hacer muchas 
+comparaciones. Sin embargo, podemos ver que el tiempo de búsqueda es mucho inferior ya que, al estar 
+ordenado, podemos hallar el elemento bajando por la rama correspondiente
+
+- ¿Hay alguna propiedad del árbol que permita explicar este comportamiento?
+
+En un árbol ordenado los números más grandes siempre van a la derecha y los más pequeños a la izquierda,
+haciendo que se tarde más en ordenarlo, ya que hay que ver todos los valores, y mucho menos en buscar un nodo.
+
+-------------------------------- Reflexiones sobre el TAD SQ --------------------------------
+- ¿Qué diferencias y similitudes hay entre el TAD SQ y el TAD Cola de la práctica anterior?
+
+/*TODO - */
+
+- ¿Qué coste (aproximado) tiene la operación de extraer un elemento en el TAD SQ?
+¿Sería posible hacer que esta operación fuera 𝒪(1)?
+
+/*TODO - */
